@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="Админ-панель интернет-магазина BookMarket." name="description" />
+    <title>Админ-панель - BookMarket</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="css/normalize.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body class="page">
+    <main class="main admin-page">
+        <div class="container">
+            <section aria-labelledby="admin-title" class="admin-topbar">
+                <div class="admin-topbar__brand">
+                    <div class="admin-topbar__logo">B</div>
+                    <div class="admin-topbar__content">
+                        <h1 class="admin-topbar__title" id="admin-title">Панель управления магазином</h1>
+                    </div>
+                </div>
+                <button class="btn btn--primary admin-topbar__button" type="button">
+                    Добавить книгу
+                </button>
+            </section>
+            <section aria-label="Статистика магазина" class="admin-stats">
+                <article class="admin-stat-card">
+                    <div class="admin-stat-card__head">
+                        <span aria-hidden="true" class="admin-stat-card__icon">📘</span>
+                        <span class="admin-stat-card__label">Всего книг</span>
+                    </div>
+                    <p class="admin-stat-card__value">28</p>
+                </article>
+                <article class="admin-stat-card">
+                    <div class="admin-stat-card__head">
+                        <span aria-hidden="true" class="admin-stat-card__icon">🏷</span>
+                        <span class="admin-stat-card__label">Категорий</span>
+                    </div>
+                    <p class="admin-stat-card__value">7</p>
+                </article>
+                <article class="admin-stat-card">
+                    <div class="admin-stat-card__head">
+                        <span aria-hidden="true" class="admin-stat-card__icon">📋</span>
+                        <span class="admin-stat-card__label">Заказов</span>
+                    </div>
+                    <p class="admin-stat-card__value">54</p>
+                </article>
+                <article class="admin-stat-card">
+                    <div class="admin-stat-card__head">
+                        <span aria-hidden="true" class="admin-stat-card__icon">👥</span>
+                        <span class="admin-stat-card__label">Пользователей</span>
+                    </div>
+                    <p class="admin-stat-card__value">31</p>
+                </article>
+            </section>
+            <section aria-labelledby="admin-books-title" class="admin-panel">
+                <div class="admin-section-heading">
+                    <span aria-hidden="true" class="admin-section-heading__icon">📦</span>
+                    <h2 class="admin-section-heading__title" id="admin-books-title">Управление книгами</h2>
+                </div>
+                <div class="admin-table">
+                    <div class="admin-table__head">
+                        <div>Книга</div>
+                        <div>Автор</div>
+                        <div>Цена</div>
+                        <div>Остаток</div>
+                        <div>Действия</div>
+                    </div>
+                    <article class="admin-table__row">
+                        <div class="admin-table__cell admin-table__cell--title">1984</div>
+                        <div class="admin-table__cell">Джордж Оруэлл</div>
+                        <div class="admin-table__cell">590 ₽</div>
+                        <div class="admin-table__cell">12</div>
+                        <div class="admin-table__cell admin-table__actions">
+                            <button class="admin-action admin-action--edit" type="button">Редактировать</button>
+                            <button class="admin-action admin-action--delete" type="button">Удалить</button>
+                        </div>
+                    </article>
+                    <article class="admin-table__row">
+                        <div class="admin-table__cell admin-table__cell--title">Атомные привычки</div>
+                        <div class="admin-table__cell">Джеймс Клир</div>
+                        <div class="admin-table__cell">850 ₽</div>
+                        <div class="admin-table__cell">8</div>
+                        <div class="admin-table__cell admin-table__actions">
+                            <button class="admin-action admin-action--edit" type="button">Редактировать</button>
+                            <button class="admin-action admin-action--delete" type="button">Удалить</button>
+                        </div>
+                    </article>
+                    <article class="admin-table__row">
+                        <div class="admin-table__cell admin-table__cell--title">Мастер и Маргарита</div>
+                        <div class="admin-table__cell">М. Булгаков</div>
+                        <div class="admin-table__cell">720 ₽</div>
+                        <div class="admin-table__cell">0</div>
+                        <div class="admin-table__cell admin-table__actions">
+                            <button class="admin-action admin-action--edit" type="button">Редактировать</button>
+                            <button class="admin-action admin-action--delete" type="button">Удалить</button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            <div class="admin-grid">
+                <section aria-labelledby="admin-categories-title" class="admin-panel">
+                    <div class="admin-section-heading">
+                        <span aria-hidden="true" class="admin-section-heading__icon">🏷</span>
+                        <h2 class="admin-section-heading__title" id="admin-categories-title">Категории</h2>
+                    </div>
+                    <div class="admin-list">
+                        <article class="admin-list__row">
+                            <span class="admin-list__main">Художественная литература</span>
+                            <button class="admin-list__link" type="button">Редактировать</button>
+                        </article>
+                        <article class="admin-list__row">
+                            <span class="admin-list__main">Фантастика</span>
+                            <button class="admin-list__link" type="button">Редактировать</button>
+                        </article>
+                        <article class="admin-list__row">
+                            <span class="admin-list__main">Учебная литература</span>
+                            <button class="admin-list__link" type="button">Редактировать</button>
+                        </article>
+                        <article class="admin-list__row">
+                            <span class="admin-list__main">Саморазвитие</span>
+                            <button class="admin-list__link" type="button">Редактировать</button>
+                        </article>
+                    </div>
+                </section>
+                <section aria-labelledby="admin-orders-title" class="admin-panel">
+                    <div class="admin-section-heading">
+                        <span aria-hidden="true" class="admin-section-heading__icon">📋</span>
+                        <h2 class="admin-section-heading__title" id="admin-orders-title">Последние заказы</h2>
+                    </div>
+                    <div class="admin-orders">
+                        <article class="admin-orders__row">
+                            <span class="admin-orders__id">#10021</span>
+                            <span class="admin-orders__user">Иван Петров</span>
+                            <span class="admin-orders__status">Новый</span>
+                        </article>
+                        <article class="admin-orders__row">
+                            <span class="admin-orders__id">#10020</span>
+                            <span class="admin-orders__user">Мария Соколова</span>
+                            <span class="admin-orders__status">Отправлен</span>
+                        </article>
+                        <article class="admin-orders__row">
+                            <span class="admin-orders__id">#10019</span>
+                            <span class="admin-orders__user">Анна Иванова</span>
+                            <span class="admin-orders__status">Доставлен</span>
+                        </article>
+                    </div>
+                </section>
+            </div>
+            <section aria-labelledby="admin-users-title" class="admin-panel">
+                <div class="admin-section-heading">
+                    <span aria-hidden="true" class="admin-section-heading__icon">👥</span>
+                    <h2 class="admin-section-heading__title" id="admin-users-title">Пользователи</h2>
+                </div>
+                <div class="admin-users">
+                    <article class="admin-users__row">
+                        <span class="admin-users__name">Иван Петров</span>
+                        <span class="admin-users__email">ivan@mail.ru</span>
+                        <span class="admin-users__orders">3 заказа</span>
+                    </article>
+                    <article class="admin-users__row">
+                        <span class="admin-users__name">Мария Соколова</span>
+                        <span class="admin-users__email">maria@mail.ru</span>
+                        <span class="admin-users__orders">1 заказ</span>
+                    </article>
+                    <article class="admin-users__row">
+                        <span class="admin-users__name">Анна Иванова</span>
+                        <span class="admin-users__email">anna@mail.ru</span>
+                        <span class="admin-users__orders">5 заказов</span>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="js/books-data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

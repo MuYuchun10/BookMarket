@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="BookMarket — интернет-магазин печатных книг для учёбы, отдыха и саморазвития." name="description" />
+    <title>Главная - BookMarket</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="css/normalize.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body class="page">
+    <header class="header">
+        <div class="container">
+            <div class="header__container">
+                <a aria-label="BookMarket — перейти на главную" class="logo" href="index.html">
+                    <span class="logo__icon">B</span>
+                    <span class="logo__content">
+                        <span class="logo__text">BookMarket</span>
+                        <span class="logo__subtitle">Интернет-магазин книг</span>
+                    </span>
+                </a>
+                <nav aria-label="Основная навигация" class="nav">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a class="nav__link nav__link--active" href="index.html">Главная</a>
+                        </li>
+                        <li class="nav__item">
+                            <a class="nav__link" href="catalog.html">Каталог</a>
+                        </li>
+                        <li class="nav__item">
+                            <a class="nav__link" href="contacts.html">Контакты</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="user-nav">
+                    <a class="user-nav__link js-account-link" href="profile.html">Личный кабинет</a>
+                    <a class="user-nav__link user-nav__link--accent" href="cart.html">
+                        Корзина (<span class="cart-count">0</span>)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <section class="hero">
+            <div class="container hero__container">
+                <div class="hero__content">
+                    <p class="hero__subtitle">Новинки и бестселлеры</p>
+                    <h1 class="hero__title">Найди свою следующую любимую книгу</h1>
+                    <p class="hero__description">
+                        Художественная литература, учебные издания, книги по бизнесу
+                        и саморазвитию — всё в одном удобном каталоге.
+                    </p>
+                    <div class="hero__actions">
+                        <a class="btn btn--primary" href="catalog.html">Перейти в каталог</a>
+                        <a class="btn btn--secondary" href="#featured">Популярные книги</a>
+                    </div>
+                </div>
+                <aside class="hero__aside">
+                    <h2 class="hero__aside-title">Быстрый поиск</h2>
+                    <form action="catalog.html" class="search-form" method="get">
+                        <label class="visually-hidden" for="search-query">Название книги</label>
+                        <input class="search-form__input" id="search-query" name="query"
+                            placeholder="Название книги" type="text" />
+                        <label class="visually-hidden" for="search-author">Автор</label>
+                        <input class="search-form__input" id="search-author" name="author"
+                            placeholder="Автор" type="text" />
+                        <label class="visually-hidden" for="search-category">Категория</label>
+                        <select class="search-form__select" id="search-category" name="category">
+                            <option value="">Категория</option>
+                            <option value="fiction">Художественная</option>
+                            <option value="fantasy">Фантастика</option>
+                            <option value="detective">Детективы</option>
+                            <option value="study">Учебная</option>
+                            <option value="business">Бизнес</option>
+                            <option value="self-development">Саморазвитие</option>
+                        </select>
+                        <div class="search-form__price">
+                            <label class="visually-hidden" for="search-price-from">Цена от</label>
+                            <input class="search-form__input" id="search-price-from" min="0" name="price-from"
+                                placeholder="Цена от" type="number" />
+                            <label class="visually-hidden" for="search-price-to">Цена до</label>
+                            <input class="search-form__input" id="search-price-to" min="0" name="price-to"
+                                placeholder="Цена до" type="number" />
+                        </div>
+                        <button class="btn btn--accent search-form__button" type="submit">
+                            Найти книгу
+                        </button>
+                    </form>
+                </aside>
+            </div>
+        </section>
+        <section aria-labelledby="categories-title" class="categories">
+            <div class="container">
+                <div class="categories__block">
+                    <h2 class="section-title" id="categories-title">Популярные категории</h2>
+                    <ul class="categories__list">
+                        <li class="categories__item">
+                            <a class="category-pill" href="catalog.html?category=fiction">Художественная</a>
+                        </li>
+                        <li class="categories__item">
+                            <a class="category-pill" href="catalog.html?category=fantasy">Фантастика</a>
+                        </li>
+                        <li class="categories__item">
+                            <a class="category-pill" href="catalog.html?category=detective">Детективы</a>
+                        </li>
+                        <li class="categories__item">
+                            <a class="category-pill" href="catalog.html?category=study">Учебная</a>
+                        </li>
+                        <li class="categories__item">
+                            <a class="category-pill" href="catalog.html?category=business">Бизнес</a>
+                        </li>
+                        <li class="categories__item">
+                            <a class="category-pill" href="catalog.html?category=self-development">Саморазвитие</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section aria-labelledby="featured-title" class="featured" id="featured">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" id="featured-title">Популярные книги</h2>
+                    <a class="section-link" href="catalog.html">Смотреть все</a>
+                </div>
+                <div class="products-grid">
+                    <article class="product-card" data-product-author="Джордж Оруэлл" data-product-available="false"
+                        data-product-category="Художественная литература" data-product-category-slug="fiction"
+                        data-product-description="Культовый роман-антиутопия о тотальном контроле, свободе и цене человеческой личности."
+                        data-product-id="book-1984" data-product-image="images/books/1984-front.jpg"
+                        data-product-link="book.html" data-product-price="590" data-product-title="1984">
+                        <div aria-label="Обложка книги 1984" class="product-card__image">Обложка книги</div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">1984</h3>
+                            <p class="product-card__author">Джордж Оруэлл</p>
+                            <div class="product-card__meta">
+                                <p class="product-card__price">590 ₽</p>
+                                <p class="product-card__status product-card__status--out">Нет в наличии</p>
+                            </div>
+                            <div class="product-card__actions"><button class="product-card__btn add-to-cart"
+                                    type="button">Добавить в корзину</button><button
+                                    class="product-card__quick-btn open-modal" type="button">Быстрый просмотр</button>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="product-card" data-product-author="М. Булгаков" data-product-category="Классика"
+                        data-product-category-slug="fiction"
+                        data-product-description="Мистический роман о добре и зле, любви, сатире и свободе выбора."
+                        data-product-id="book-master-margarita"
+                        data-product-image="images/books/master-margarita-front.jpg" data-product-link="catalog.html"
+                        data-product-price="720" data-product-title="Мастер и Маргарита">
+                        <div aria-label="Обложка книги Мастер и Маргарита" class="product-card__image">Обложка книги
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Мастер и Маргарита</h3>
+                            <p class="product-card__author">М. Булгаков</p>
+                            <div class="product-card__meta">
+                                <p class="product-card__price">720 ₽</p>
+                                <p class="product-card__status">В наличии</p>
+                            </div>
+                            <div class="product-card__actions"><button class="product-card__btn add-to-cart"
+                                    type="button">Добавить в корзину</button><button
+                                    class="product-card__quick-btn open-modal" type="button">Быстрый просмотр</button>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="product-card" data-product-author="Джеймс Клир" data-product-category="Саморазвитие"
+                        data-product-category-slug="self-development"
+                        data-product-description="Практическая книга о том, как маленькие привычки приводят к большим результатам."
+                        data-product-id="book-atomic-habits" data-product-image="images/books/atomic-habits-front.jpg"
+                        data-product-link="catalog.html" data-product-price="850" data-product-title="Атомные привычки">
+                        <div aria-label="Обложка книги Атомные привычки" class="product-card__image">Обложка книги</div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Атомные привычки</h3>
+                            <p class="product-card__author">Джеймс Клир</p>
+                            <div class="product-card__meta">
+                                <p class="product-card__price">850 ₽</p>
+                                <p class="product-card__status">В наличии</p>
+                            </div>
+                            <div class="product-card__actions"><button class="product-card__btn add-to-cart"
+                                    type="button">Добавить в корзину</button><button
+                                    class="product-card__quick-btn open-modal" type="button">Быстрый просмотр</button>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="product-card" data-product-author="Дж. К. Роулинг" data-product-category="Фэнтези"
+                        data-product-category-slug="fantasy"
+                        data-product-description="Известная история о школе магии, дружбе, взрослении и борьбе со злом."
+                        data-product-id="book-harry-potter" data-product-image="images/books/harry-potter-front.jpg"
+                        data-product-link="catalog.html" data-product-price="910" data-product-title="Гарри Поттер">
+                        <div aria-label="Обложка книги Гарри Поттер" class="product-card__image">Обложка книги</div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Гарри Поттер</h3>
+                            <p class="product-card__author">Дж. К. Роулинг</p>
+                            <div class="product-card__meta">
+                                <p class="product-card__price">910 ₽</p>
+                                <p class="product-card__status">В наличии</p>
+                            </div>
+                            <div class="product-card__actions"><button class="product-card__btn add-to-cart"
+                                    type="button">Добавить в корзину</button><button
+                                    class="product-card__quick-btn open-modal" type="button">Быстрый просмотр</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <section aria-labelledby="advantages-title" class="advantages">
+            <div class="container">
+                <h2 class="visually-hidden" id="advantages-title">Преимущества магазина</h2>
+                <div class="advantages__grid">
+                    <article class="advantage-card">
+                        <span aria-hidden="true" class="advantage-card__icon advantage-card__icon--delivery"></span>
+                        <h3 class="advantage-card__title">Быстрая доставка</h3>
+                        <p class="advantage-card__text">
+                            Оформление заказа за пару шагов и понятная форма адреса.
+                        </p>
+                    </article>
+                    <article class="advantage-card">
+                        <span aria-hidden="true" class="advantage-card__icon advantage-card__icon--stock"></span>
+                        <h3 class="advantage-card__title">Актуальное наличие</h3>
+                        <p class="advantage-card__text">
+                            На карточке книги сразу видно, доступен ли товар на складе.
+                        </p>
+                    </article>
+                    <article class="advantage-card">
+                        <span aria-hidden="true" class="advantage-card__icon advantage-card__icon--account"></span>
+                        <h3 class="advantage-card__title">Удобный кабинет</h3>
+                        <p class="advantage-card__text">
+                            Пользователь может посмотреть историю заказов и изменить профиль.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <section aria-labelledby="promo-title" class="promo">
+            <div class="container">
+                <div class="promo__container">
+                    <h2 class="promo__title" id="promo-title">Скидка 10% на первый заказ</h2>
+                    <a class="btn btn--light" href="catalog.html">Выбрать книги</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__container">
+                <div class="footer__column">
+                    <h3 class="footer__title">BookMarket</h3>
+                    <p class="footer__text">
+                        Онлайн-магазин печатных книг для учёбы, отдыха и саморазвития.
+                    </p>
+                </div>
+                <div class="footer__column">
+                    <h3 class="footer__title">Разделы</h3>
+                    <ul class="footer__list">
+                        <li class="footer__item">
+                            <a class="footer__link" href="index.html">Главная</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link" href="catalog.html">Каталог</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link" href="contacts.html">Контакты</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer__column">
+                    <h3 class="footer__title">Покупателю</h3>
+                    <ul class="footer__list">
+                        <li class="footer__item">
+                            <a class="footer__link js-account-link" href="profile.html">Личный кабинет</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link" href="cart.html">Корзина</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link js-checkout-link" href="checkout.html">Оформление заказа</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer__column">
+                    <h3 class="footer__title">Контакты</h3>
+                    <address class="footer__address">
+                        <a class="footer__link" href="tel:+79001234567">+7 (900) 123-45-67</a><br />
+                        <a class="footer__link" href="mailto:bookmarket@mail.ru">bookmarket@mail.ru</a><br />
+                        г. Орёл
+                    </address>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div aria-hidden="true" class="modal" id="quickViewModal">
+        <div aria-labelledby="quickViewTitle" aria-modal="true" class="modal__content" role="dialog">
+            <button aria-label="Закрыть окно" class="modal__close" type="button">×</button>
+            <h2 class="modal__title" id="quickViewTitle">Быстрый просмотр</h2>
+            <div class="modal__body"></div>
+        </div>
+    </div>
+    <script src="js/books-data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

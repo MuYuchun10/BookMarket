@@ -1,0 +1,33 @@
+# Editor folders
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Node.js dependencies, если потом добавишь npm/Vite/Webpack
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build folders, если проект потом будет собираться
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local

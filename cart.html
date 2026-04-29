@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="Корзина интернет-магазина BookMarket." name="description" />
+    <title>Корзина - BookMarket</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="css/normalize.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body class="page">
+    <header class="header">
+        <div class="container">
+            <div class="header__container">
+                <a aria-label="BookMarket — перейти на главную" class="logo" href="index.html">
+                    <span class="logo__icon">B</span>
+                    <span class="logo__content">
+                        <span class="logo__text">BookMarket</span>
+                        <span class="logo__subtitle">Интернет-магазин книг</span>
+                    </span>
+                </a>
+                <nav aria-label="Основная навигация" class="nav">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a class="nav__link" href="index.html">Главная</a>
+                        </li>
+                        <li class="nav__item">
+                            <a class="nav__link" href="catalog.html">Каталог</a>
+                        </li>
+                        <li class="nav__item">
+                            <a class="nav__link" href="contacts.html">Контакты</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="user-nav">
+                    <a class="user-nav__link js-account-link" href="profile.html">Личный кабинет</a>
+                    <a class="user-nav__link user-nav__link--accent" href="cart.html">
+                        Корзина (<span class="cart-count">0</span>)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <section aria-labelledby="cart-title" class="cart-page">
+            <div class="container">
+                <p class="cart-page__eyebrow">Корзина</p>
+                <h1 class="cart-page__title" id="cart-title">
+                    Проверьте выбранные книги перед оформлением заказа
+                </h1>
+                <div class="cart-layout">
+                    <section aria-label="Товары в корзине" class="cart-items" data-cart-items="true" id="cart-items">
+                    </section>
+                    <aside class="cart-total">
+                        <h2 class="cart-total__title">Итого по заказу</h2>
+                        <div class="cart-total__rows">
+                            <div class="cart-total__row">
+                                <span>Товары</span>
+                                <span id="cart-subtotal">0 ₽</span>
+                            </div>
+                            <div class="cart-total__row">
+                                <span>Скидка 10%</span>
+                                <span id="cart-discount">0 ₽</span>
+                            </div>
+                        </div>
+                        <div class="cart-total__result">
+                            <span>Итого</span>
+                            <span id="cart-total">0 ₽</span>
+                        </div>
+                        <a class="btn btn--accent cart-total__button js-checkout-link" href="checkout.html"
+                            id="checkout-btn">
+                            Перейти к оформлению
+                        </a>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__container">
+                <div class="footer__column">
+                    <h3 class="footer__title">BookMarket</h3>
+                    <p class="footer__text">
+                        Онлайн-магазин печатных книг для учёбы, отдыха и саморазвития.
+                    </p>
+                </div>
+                <div class="footer__column">
+                    <h3 class="footer__title">Разделы</h3>
+                    <ul class="footer__list">
+                        <li class="footer__item">
+                            <a class="footer__link" href="index.html">Главная</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link" href="catalog.html">Каталог</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link" href="contacts.html">Контакты</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer__column">
+                    <h3 class="footer__title">Покупателю</h3>
+                    <ul class="footer__list">
+                        <li class="footer__item">
+                            <a class="footer__link js-account-link" href="profile.html">Личный кабинет</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link" href="cart.html">Корзина</a>
+                        </li>
+                        <li class="footer__item">
+                            <a class="footer__link js-checkout-link" href="checkout.html">Оформление заказа</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer__column">
+                    <h3 class="footer__title">Контакты</h3>
+                    <address class="footer__address">
+                        <a class="footer__link" href="tel:+79001234567">+7 (900) 123-45-67</a><br />
+                        <a class="footer__link" href="mailto:bookmarket@mail.ru">bookmarket@mail.ru</a><br />
+                        г. Орёл
+                    </address>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="js/books-data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

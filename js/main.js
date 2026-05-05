@@ -1088,64 +1088,6 @@
         }
     }
 
-    /* Логика формы обратной связи */
-    function initContactForm() {
-        const form = document.querySelector('.contact-form');
-        if (!form) {
-            return;
-        }
-
-        const successBox = form.querySelector('.contact-form__success');
-
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            clearErrors(form);
-            if (successBox) {
-                successBox.classList.remove('show');
-                successBox.textContent = '';
-            }
-
-            const name = form.querySelector('#contact-name');
-            const email = form.querySelector('#contact-email');
-            const subject = form.querySelector('#contact-subject');
-            const message = form.querySelector('#contact-message');
-            let isValid = true;
-
-            if (!name.value.trim()) {
-                showError(name, 'Введите имя');
-                isValid = false;
-            }
-
-            if (!email.value.trim()) {
-                showError(email, 'Введите email');
-                isValid = false;
-            } else if (!isValidEmail(email.value.trim())) {
-                showError(email, 'Введите корректный email');
-                isValid = false;
-            }
-
-            if (!subject.value.trim()) {
-                showError(subject, 'Укажите тему сообщения');
-                isValid = false;
-            }
-
-            if (!message.value.trim()) {
-                showError(message, 'Введите сообщение');
-                isValid = false;
-            } else if (message.value.trim().length < 10) {
-                showError(message, 'Сообщение должно содержать минимум 10 символов');
-                isValid = false;
-            }
-
-            if (isValid) {
-                if (successBox) {
-                    successBox.textContent = 'Форма успешно отправлена. Спасибо за обращение!';
-                    successBox.classList.add('show');
-                }
-                form.reset();
-            }
-        });
-    }
 
     /* Логика галереи книги и переключения миниатюр */
     function initGallery() {
@@ -1822,7 +1764,6 @@
         cart.renderCart();
         initAddToCartButtons();
         initQuickViewModal();
-        initContactForm();
         initGallery();
         initBuyNowButtons();
         initCatalogControls();

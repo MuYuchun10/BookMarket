@@ -5,6 +5,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $isLogged = isset($_SESSION['user_id']);
 $userName = $_SESSION['user_name'] ?? '';
+
+$currentPage = basename($_SERVER['SCRIPT_NAME']);
+
+$isIndexActive = $currentPage === 'index.php';
+$isCatalogActive = in_array($currentPage, ['catalog.php', 'book.php'], true);
+$isContactsActive = $currentPage === 'contacts.php';
 ?>
 
 <header class="header">
@@ -17,19 +23,27 @@ $userName = $_SESSION['user_name'] ?? '';
                     <span class="logo__subtitle">Интернет-магазин книг</span>
                 </span>
             </a>
+
             <nav aria-label="Основная навигация" class="nav">
                 <ul class="nav__list">
                     <li class="nav__item">
-                        <a class="nav__link nav__link--active" href="index.php">Главная</a>
+                        <a class="nav__link <?php echo $isIndexActive ? 'nav__link--active' : ''; ?>" href="index.php">
+                            Главная
+                        </a>
                     </li>
                     <li class="nav__item">
-                        <a class="nav__link" href="catalog.php">Каталог</a>
+                        <a class="nav__link <?php echo $isCatalogActive ? 'nav__link--active' : ''; ?>" href="catalog.php">
+                            Каталог
+                        </a>
                     </li>
                     <li class="nav__item">
-                        <a class="nav__link" href="contacts.php">Контакты</a>
+                        <a class="nav__link <?php echo $isContactsActive ? 'nav__link--active' : ''; ?>" href="contacts.php">
+                            Контакты
+                        </a>
                     </li>
                 </ul>
             </nav>
+
             <div class="user-nav">
                 <?php if ($isLogged): ?>
                     <a class="user-nav__link" href="profile.php">

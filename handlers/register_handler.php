@@ -10,6 +10,13 @@ $name = trim($_POST['name'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 $confirm = $_POST['confirm_password'] ?? '';
+$redirectTarget = $_POST['redirect'] ?? 'profile.php';
+
+$allowedRedirects = ['profile.php', 'checkout.php', 'cart.php'];
+
+if (!in_array($redirectTarget, $allowedRedirects, true)) {
+    $redirectTarget = 'profile.php';
+}
 
 $errors = [];
 
@@ -40,7 +47,11 @@ if (!empty($errors)) {
         'email' => $email
     ];
 
-    header('Location: ../account.php');
+    $redirectQuery = $redirectTarget !== 'profile.php'
+        ? '?redirect=' . rawurlencode($redirectTarget)
+        : '';
+
+    header('Location: ../account.php' . $redirectQuery);
     exit;
 }
 
@@ -50,5 +61,5 @@ $_SESSION['user_id'] = 1;
 $_SESSION['user_name'] = $name;
 $_SESSION['user_email'] = $email;
 
-header('Location: ../profile.php');
+header('Location: ../' . $redirectTarget);
 exit;

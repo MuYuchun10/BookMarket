@@ -2,7 +2,8 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: account.php?redirect=checkout.php&notice=Чтобы оформить заказ, сначала войдите или зарегистрируйтесь');
+    $notice = rawurlencode('Чтобы оформить заказ, сначала войдите или зарегистрируйтесь');
+    header('Location: account.php?redirect=checkout.php&notice=' . $notice);
     exit;
 }
 ?>

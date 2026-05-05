@@ -360,34 +360,13 @@
 
     /* Обновление ссылок кабинета и checkout в зависимости от авторизации */
     function updateAuthAwareLinks() {
-        const loggedIn = isAuthenticated();
-
-        document.querySelectorAll('.js-account-link').forEach((link) => {
-            link.setAttribute('href', loggedIn ? 'profile.php' : formatAuthRedirectUrl('profile.php'));
-        });
-
-        document.querySelectorAll('.js-checkout-link').forEach((link) => {
-            link.setAttribute('href', loggedIn ? 'checkout.php' : formatAuthRedirectUrl('checkout.php'));
-        });
+        return;
     }
 
     /* Защита приватных страниц от неавторизованного доступа */
     function enforceProtectedPageAccess() {
-    const currentPage = getCurrentPage();
-
-    // profile.php защищается на стороне PHP через $_SESSION,
-    // поэтому JS не должен дополнительно проверять localStorage.
-    if (currentPage === 'profile.php') {
         return true;
     }
-
-    if (currentPage === 'checkout.php' && !isAuthenticated()) {
-        redirectToAccount(currentPage, 'Чтобы открыть эту страницу, сначала войдите или зарегистрируйтесь');
-        return false;
-    }
-
-    return true;
-}
 
     /* Генерация заглушки обложки книги в SVG */
     function createCoverDataUrl(label, tone) {
@@ -1499,130 +1478,53 @@
     /* Логика страницы профиля */
     function initProfilePage() {
         const profilePage = document.querySelector('.profile-page');
+
         if (!profilePage) {
             return;
         }
 
-        const user = getAuthUser();
-        if (!user) {
+        const profileForm = profilePage.querySelector('#profile-form');
+
+        if (!profileForm || profileForm.dataset.bound === 'true') {
             return;
         }
 
-        const heroText = document.querySelector('.profile-hero__text');
-        const profileForm = document.querySelector('.profile-form');
-        const nameField = document.getElementById('profile-name');
-        const emailField = document.getElementById('profile-email');
-        const phoneField = document.getElementById('profile-phone');
-        const cityField = document.getElementById('profile-city');
-        const addressField = document.getElementById('profile-address');
-        const postcodeField = document.getElementById('profile-postcode');
-        const logoutButton = document.querySelector('.profile-hero__button');
-        const ordersList = document.querySelector('.orders-list');
+        profileForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            clearErrors(profileForm);
 
-        function updateHero(nextUser) {
-            if (heroText) {
-                heroText.textContent = `${nextUser.name} · ${nextUser.email || 'email не указан'}`;
+            const nameInput = profileForm.querySelector('#profile-name');
+            const emailInput = profileForm.querySelector('#profile-email');
+            const phoneInput = profileForm.querySelector('#profile-phone');
+
+            let isValid = true;
+
+            if (nameInput && !nameInput.value.trim()) {
+                showError(nameInput, 'Введите имя');
+                isValid = false;
             }
-        }
 
-        function renderOrders() {
-            if (!ordersList) {
+            if (emailInput && !emailInput.value.trim()) {
+                showError(emailInput, 'Введите email');
+                isValid = false;
+            } else if (emailInput && !isValidEmail(emailInput.value.trim())) {
+                showError(emailInput, 'Введите корректный email');
+                isValid = false;
+            }
+
+            if (phoneInput && phoneInput.value.trim() && phoneInput.value.trim().length < 6) {
+                showError(phoneInput, 'Введите корректный телефон');
+                isValid = false;
+            }
+
+            if (!isValid) {
                 return;
             }
 
-            const orders = getOrdersByUser(getAuthUser());
-            if (!orders.length) {
-                ordersList.innerHTML = `
-                    <article class="order-row order-row--empty">
-                        <div class="order-row__id">Пока нет заказов</div>
-                        <div class="order-row__count">Оформите первую покупку в каталоге</div>
-                        <div class="order-row__price">0 ₽</div>
-                        <div class="order-row__status">Ожидается</div>
-                    </article>
-                `;
-                return;
-            }
+            showToast('Данные профиля проверены');
+        });
 
-            ordersList.innerHTML = orders.map((order) => {
-                const totalCount = order.items.reduce((sum, item) => sum + item.quantity, 0);
-                return `
-                    <article class="order-row">
-                        <div class="order-row__id">${escapeHtml(order.id)}</div>
-                        <div class="order-row__count">${totalCount} ${pluralize(totalCount, 'книга', 'книги', 'книг')} · ${escapeHtml(formatOrderDate(order.createdAt))}</div>
-                        <div class="order-row__price">${formatPrice(order.total)}</div>
-                        <div class="order-row__status">${escapeHtml(order.status)}</div>
-                    </article>
-                `;
-            }).join('');
-        }
-
-        updateHero(user);
-        if (nameField) nameField.value = user.name || '';
-        if (emailField) emailField.value = user.email || '';
-        if (phoneField) phoneField.value = user.phone || '';
-        if (cityField) cityField.value = user.city || '';
-        if (addressField) addressField.value = user.address || '';
-        if (postcodeField) postcodeField.value = user.postcode || '';
-        renderOrders();
-
-        if (profileForm && !profileForm.dataset.bound) {
-            profileForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                clearErrors(profileForm);
-
-                const nextName = nameField ? nameField.value.trim() : '';
-                const nextEmail = emailField ? emailField.value.trim() : '';
-                let isValid = true;
-
-                if (!nextName) {
-                    showError(nameField, 'Введите имя');
-                    isValid = false;
-                }
-                if (!nextEmail) {
-                    showError(emailField, 'Введите email');
-                    isValid = false;
-                } else if (!isValidEmail(nextEmail)) {
-                    showError(emailField, 'Введите корректный email');
-                    isValid = false;
-                }
-                if (phoneField && phoneField.value.trim() && !isValidPhone(phoneField.value.trim())) {
-                    showError(phoneField, 'Введите корректный номер телефона');
-                    isValid = false;
-                }
-
-                if (!isValid) {
-                    return;
-                }
-
-                const nextUser = {
-                    ...(getAuthUser() || {}),
-                    name: nextName,
-                    email: nextEmail,
-                    phone: phoneField ? phoneField.value.trim() : '',
-                    city: cityField ? cityField.value.trim() : '',
-                    address: addressField ? addressField.value.trim() : '',
-                    postcode: postcodeField ? postcodeField.value.trim() : ''
-                };
-
-                setAuthUser(nextUser);
-                updateAuthAwareLinks();
-                updateHero(nextUser);
-                renderOrders();
-                showToast('Данные профиля сохранены');
-            });
-            profileForm.dataset.bound = 'true';
-        }
-
-        if (logoutButton && !logoutButton.dataset.bound) {
-            logoutButton.addEventListener('click', function () {
-                clearAuthUser();
-                updateAuthAwareLinks();
-                window.location.href = 'account.php';
-            });
-            logoutButton.dataset.bound = 'true';
-        }
-
-        return;
+        profileForm.dataset.bound = 'true';
     }
 
     /* Синхронизация состояния между вкладками браузера */
@@ -1651,11 +1553,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         cart.load();
         cart.updateCounter();
-        updateAuthAwareLinks();
 
-        if (!enforceProtectedPageAccess()) {
-            return;
-        }
 
         initProductLinks();
         initBookPage();

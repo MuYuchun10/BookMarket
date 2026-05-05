@@ -44,8 +44,7 @@
                             <span>Итого</span>
                             <span id="cart-total">0 ₽</span>
                         </div>
-                        <a class="btn btn--accent cart-total__button js-checkout-link" href="checkout.php"
-                            id="checkout-btn">
+                        <a class="btn btn--accent cart-total__button" href="checkout.php" id="checkout-btn">
                             Перейти к оформлению
                         </a>
                     </aside>

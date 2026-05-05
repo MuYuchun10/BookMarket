@@ -7,6 +7,7 @@
                     Онлайн-магазин печатных книг для учёбы, отдыха и саморазвития.
                 </p>
             </div>
+
             <div class="footer__column">
                 <h3 class="footer__title">Разделы</h3>
                 <ul class="footer__list">
@@ -21,6 +22,7 @@
                     </li>
                 </ul>
             </div>
+
             <div class="footer__column">
                 <h3 class="footer__title">Покупателю</h3>
                 <ul class="footer__list">
@@ -31,10 +33,11 @@
                         <a class="footer__link" href="cart.php">Корзина</a>
                     </li>
                     <li class="footer__item">
-                        <a class="footer__link js-checkout-link" href="checkout.php">Оформление заказа</a>
+                        <a class="footer__link" href="checkout.php">Оформление заказа</a>
                     </li>
                 </ul>
             </div>
+
             <div class="footer__column">
                 <h3 class="footer__title">Контакты</h3>
                 <address class="footer__address">

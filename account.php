@@ -13,6 +13,13 @@ unset(
     $_SESSION['register_errors'],
     $_SESSION['register_old']
 );
+
+$redirectTarget = $_GET['redirect'] ?? 'profile.php';
+$allowedRedirects = ['profile.php', 'checkout.php', 'cart.php'];
+
+if (!in_array($redirectTarget, $allowedRedirects, true)) {
+    $redirectTarget = 'profile.php';
+}
 ?>
 <!DOCTYPE html>
 
@@ -45,6 +52,7 @@ unset(
                             Введите email и пароль, чтобы войти в личный кабинет
                         </p>
                         <form action="handlers/login_handler.php" class="auth-form" method="post" novalidate>
+                            <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirectTarget); ?>">
                             <label class="visually-hidden" for="login-email">Email</label>
                             <input autocomplete="email" class="auth-form__input" id="login-email" name="email"
                                 placeholder="Email" required="" type="email"
@@ -83,6 +91,7 @@ unset(
                             Создайте аккаунт, чтобы сохранять данные и отслеживать заказы
                         </p>
                         <form action="handlers/register_handler.php" class="auth-form" method="post" novalidate>
+                            <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirectTarget); ?>">
                             <label class="visually-hidden" for="register-name">Имя</label>
                             <input autocomplete="name" class="auth-form__input" id="register-name" name="name"
                                 placeholder="Имя" required="" type="text"

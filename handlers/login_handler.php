@@ -8,6 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
+$redirectTarget = $_POST['redirect'] ?? 'profile.php';
+
+$allowedRedirects = ['profile.php', 'checkout.php', 'cart.php'];
+
+if (!in_array($redirectTarget, $allowedRedirects, true)) {
+    $redirectTarget = 'profile.php';
+}
 
 $errors = [];
 
@@ -27,7 +34,7 @@ if (empty($errors)) {
         $_SESSION['user_name'] = 'Администратор';
         $_SESSION['user_email'] = $email;
 
-        header('Location: ../profile.php');
+        header('Location: ../' . $redirectTarget);
         exit;
     }
 
@@ -39,5 +46,9 @@ $_SESSION['login_old'] = [
     'email' => $email
 ];
 
-header('Location: ../account.php');
+$redirectQuery = $redirectTarget !== 'profile.php'
+    ? '?redirect=' . rawurlencode($redirectTarget)
+    : '';
+
+header('Location: ../account.php' . $redirectQuery);
 exit;

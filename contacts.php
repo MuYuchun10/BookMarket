@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+$errors = $_SESSION['contact_errors'] ?? [];
+$old = $_SESSION['contact_old'] ?? [];
+$success = $_SESSION['contact_success'] ?? '';
+
+unset($_SESSION['contact_errors'], $_SESSION['contact_old'], $_SESSION['contact_success']);
+?>
 <!DOCTYPE html>
 
 <html lang="ru">
@@ -36,7 +45,7 @@
                             <a class="nav__link" href="catalog.html">Каталог</a>
                         </li>
                         <li class="nav__item">
-                            <a class="nav__link nav__link--active" href="contacts.html">Контакты</a>
+                            <a class="nav__link nav__link--active" href="contacts.php">Контакты</a>
                         </li>
                     </ul>
                 </nav>
@@ -97,21 +106,58 @@
                     </div>
                     <section aria-labelledby="feedback-title" class="contact-form-card">
                         <h2 class="contact-form-card__title" id="feedback-title">Форма обратной связи</h2>
-                        <form action="#" class="contact-form" method="post" novalidate="novalidate">
-                            <div aria-live="polite" class="contact-form__success"></div>
-                            <div class="contact-form__group"><label class="visually-hidden" for="contact-name">Ваше
-                                    имя</label><input autocomplete="name" class="contact-form__input" id="contact-name"
-                                    name="name" placeholder="Ваше имя" required="" type="text" /></div>
-                            <div class="contact-form__group"><label class="visually-hidden"
-                                    for="contact-email">Email</label><input autocomplete="email"
-                                    class="contact-form__input" id="contact-email" name="email" placeholder="Email"
-                                    required="" type="email" /></div>
-                            <div class="contact-form__group"><label class="visually-hidden" for="contact-subject">Тема
-                                    сообщения</label><input class="contact-form__input" id="contact-subject"
-                                    name="subject" placeholder="Тема сообщения" required="" type="text" /></div>
-                            <div class="contact-form__group"><label class="visually-hidden"
-                                    for="contact-message">Сообщение</label><textarea class="contact-form__textarea"
-                                    id="contact-message" name="message" placeholder="Сообщение" required=""></textarea>
+                        <form action="handlers/contact_handler.php" class="contact-form" method="post"
+                            novalidate="novalidate">
+                            <div aria-live="polite" class="contact-form__success">
+                                <?php echo htmlspecialchars($success); ?>
+                            </div>
+                            <div class="contact-form__group">
+                                <label class="visually-hidden" for="contact-name">Ваше имя</label>
+                                <input autocomplete="name" class="contact-form__input" id="contact-name" name="name"
+                                    placeholder="Ваше имя" required="" type="text"
+                                    value="<?php echo htmlspecialchars($old['name'] ?? ''); ?>" />
+
+                                <?php if (isset($errors['name'])): ?>
+                                    <div class="error-message">
+                                        <?php echo htmlspecialchars($errors['name']); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="contact-form__group">
+                                <label class="visually-hidden" for="contact-email">Email</label>
+                                <input autocomplete="email" class="contact-form__input" id="contact-email" name="email"
+                                    placeholder="Email" required="" type="email"
+                                    value="<?php echo htmlspecialchars($old['email'] ?? ''); ?>" />
+
+                                <?php if (isset($errors['email'])): ?>
+                                    <div class="error-message">
+                                        <?php echo htmlspecialchars($errors['email']); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="contact-form__group">
+                                <label class="visually-hidden" for="contact-subject">Тема сообщения</label>
+                                <input class="contact-form__input" id="contact-subject" name="subject"
+                                    placeholder="Тема сообщения" required="" type="text"
+                                    value="<?php echo htmlspecialchars($old['subject'] ?? ''); ?>" />
+
+                                <?php if (isset($errors['subject'])): ?>
+                                    <div class="error-message">
+                                        <?php echo htmlspecialchars($errors['subject']); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="contact-form__group">
+                                <label class="visually-hidden" for="contact-message">Сообщение</label>
+                                <textarea class="contact-form__textarea" id="contact-message" name="message"
+                                    placeholder="Сообщение"
+                                    required=""><?php echo htmlspecialchars($old['message'] ?? ''); ?></textarea>
+
+                                <?php if (isset($errors['message'])): ?>
+                                    <div class="error-message">
+                                        <?php echo htmlspecialchars($errors['message']); ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <button class="btn btn--accent contact-form__button" type="submit">
                                 Отправить сообщение
@@ -141,7 +187,7 @@
                             <a class="footer__link" href="catalog.html">Каталог</a>
                         </li>
                         <li class="footer__item">
-                            <a class="footer__link" href="contacts.html">Контакты</a>
+                            <a class="footer__link" href="contacts.php">Контакты</a>
                         </li>
                     </ul>
                 </div>

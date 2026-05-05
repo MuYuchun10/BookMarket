@@ -76,11 +76,13 @@
         return normalizedId ? PRODUCT_INDEX[normalizedId] || null : null;
     }
 
+    /* Создание ссылки на страницу книги */
     function buildBookPageUrl(productId) {
         const normalizedId = String(productId || '').trim();
         return normalizedId ? `book.html?id=${encodeURIComponent(normalizedId)}` : 'book.html';
     }
 
+    /* Приведение товара к нормальному виду */
     function enrichProductData(product) {
         if (!product) {
             return null;
@@ -118,6 +120,7 @@
         return merged;
     }
 
+    /* Обновление Url */
     function updateUrlFromParams(params) {
         const query = params.toString();
         const nextUrl = query ? `${window.location.pathname}?${query}` : window.location.pathname;
@@ -1779,59 +1782,6 @@
         }
 
         return;
-        /*
-
-        const heroText = document.querySelector('.profile-hero__text');
-        const nameField = document.getElementById('profile-name');
-        const emailField = document.getElementById('profile-email');
-        const phoneField = document.getElementById('profile-phone');
-        const cityField = document.getElementById('profile-city');
-        const addressField = document.getElementById('profile-address');
-        const postcodeField = document.getElementById('profile-postcode');
-        const saveButton = document.querySelector('.profile-form__button');
-        const logoutButton = document.querySelector('.profile-hero__button');
-
-        if (heroText) {
-            heroText.textContent = `${user.name} · ${user.email || 'email не указан'}`;
-        }
-        if (nameField) nameField.value = user.name || '';
-        if (emailField) emailField.value = user.email || '';
-        if (phoneField) phoneField.value = user.phone || '';
-        if (cityField) cityField.value = user.city || '';
-        if (addressField) addressField.value = user.address || '';
-        if (postcodeField) postcodeField.value = user.postcode || '';
-
-        if (saveButton) {
-            saveButton.addEventListener('click', function () {
-                const nextUser = {
-                    ...user,
-                    name: nameField ? nameField.value.trim() || user.name : user.name,
-                    email: emailField ? emailField.value.trim() || user.email : user.email,
-                    phone: phoneField ? phoneField.value.trim() : '',
-                    city: cityField ? cityField.value.trim() : '',
-                    address: addressField ? addressField.value.trim() : '',
-                    postcode: postcodeField ? postcodeField.value.trim() : ''
-                };
-
-                setAuthUser(nextUser);
-                updateAuthAwareLinks();
-
-                if (heroText) {
-                    heroText.textContent = `${nextUser.name} · ${nextUser.email || 'email не указан'}`;
-                }
-
-                showToast('Данные профиля сохранены');
-            });
-        }
-
-        if (logoutButton) {
-            logoutButton.addEventListener('click', function () {
-                clearAuthUser();
-                updateAuthAwareLinks();
-                window.location.href = 'account.html';
-            });
-        }
-        */
     }
 
     /* Синхронизация состояния между вкладками браузера */

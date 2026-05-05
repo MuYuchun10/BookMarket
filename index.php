@@ -17,38 +17,7 @@
 </head>
 
 <body class="page">
-    <header class="header">
-        <div class="container">
-            <div class="header__container">
-                <a aria-label="BookMarket — перейти на главную" class="logo" href="index.html">
-                    <span class="logo__icon">B</span>
-                    <span class="logo__content">
-                        <span class="logo__text">BookMarket</span>
-                        <span class="logo__subtitle">Интернет-магазин книг</span>
-                    </span>
-                </a>
-                <nav aria-label="Основная навигация" class="nav">
-                    <ul class="nav__list">
-                        <li class="nav__item">
-                            <a class="nav__link nav__link--active" href="index.html">Главная</a>
-                        </li>
-                        <li class="nav__item">
-                            <a class="nav__link" href="catalog.html">Каталог</a>
-                        </li>
-                        <li class="nav__item">
-                            <a class="nav__link" href="contacts.php">Контакты</a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="user-nav">
-                    <a class="user-nav__link js-account-link" href="profile.php">Личный кабинет</a>
-                    <a class="user-nav__link user-nav__link--accent" href="cart.html">
-                        Корзина (<span class="cart-count">0</span>)
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
     <main class="main">
         <section class="hero">
             <div class="container hero__container">
@@ -60,13 +29,13 @@
                         и саморазвитию — всё в одном удобном каталоге.
                     </p>
                     <div class="hero__actions">
-                        <a class="btn btn--primary" href="catalog.html">Перейти в каталог</a>
+                        <a class="btn btn--primary" href="catalog.php">Перейти в каталог</a>
                         <a class="btn btn--secondary" href="#featured">Популярные книги</a>
                     </div>
                 </div>
                 <aside class="hero__aside">
                     <h2 class="hero__aside-title">Быстрый поиск</h2>
-                    <form action="catalog.html" class="search-form" method="get">
+                    <form action="catalog.php" class="search-form" method="get">
                         <label class="visually-hidden" for="search-query">Название книги</label>
                         <input class="search-form__input" id="search-query" name="query"
                             placeholder="Название книги" type="text" />
@@ -104,22 +73,22 @@
                     <h2 class="section-title" id="categories-title">Популярные категории</h2>
                     <ul class="categories__list">
                         <li class="categories__item">
-                            <a class="category-pill" href="catalog.html?category=fiction">Художественная</a>
+                            <a class="category-pill" href="catalog.php?category=fiction">Художественная</a>
                         </li>
                         <li class="categories__item">
-                            <a class="category-pill" href="catalog.html?category=fantasy">Фантастика</a>
+                            <a class="category-pill" href="catalog.php?category=fantasy">Фантастика</a>
                         </li>
                         <li class="categories__item">
-                            <a class="category-pill" href="catalog.html?category=detective">Детективы</a>
+                            <a class="category-pill" href="catalog.php?category=detective">Детективы</a>
                         </li>
                         <li class="categories__item">
-                            <a class="category-pill" href="catalog.html?category=study">Учебная</a>
+                            <a class="category-pill" href="catalog.php?category=study">Учебная</a>
                         </li>
                         <li class="categories__item">
-                            <a class="category-pill" href="catalog.html?category=business">Бизнес</a>
+                            <a class="category-pill" href="catalog.php?category=business">Бизнес</a>
                         </li>
                         <li class="categories__item">
-                            <a class="category-pill" href="catalog.html?category=self-development">Саморазвитие</a>
+                            <a class="category-pill" href="catalog.php?category=self-development">Саморазвитие</a>
                         </li>
                     </ul>
                 </div>
@@ -129,14 +98,14 @@
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title" id="featured-title">Популярные книги</h2>
-                    <a class="section-link" href="catalog.html">Смотреть все</a>
+                    <a class="section-link" href="catalog.php">Смотреть все</a>
                 </div>
                 <div class="products-grid">
                     <article class="product-card" data-product-author="Джордж Оруэлл" data-product-available="false"
                         data-product-category="Художественная литература" data-product-category-slug="fiction"
                         data-product-description="Культовый роман-антиутопия о тотальном контроле, свободе и цене человеческой личности."
                         data-product-id="book-1984" data-product-image="images/books/1984-front.jpg"
-                        data-product-link="book.html" data-product-price="590" data-product-title="1984">
+                        data-product-link="book.php" data-product-price="590" data-product-title="1984">
                         <div aria-label="Обложка книги 1984" class="product-card__image">Обложка книги</div>
                         <div class="product-card__content">
                             <h3 class="product-card__title">1984</h3>
@@ -155,7 +124,7 @@
                         data-product-category-slug="fiction"
                         data-product-description="Мистический роман о добре и зле, любви, сатире и свободе выбора."
                         data-product-id="book-master-margarita"
-                        data-product-image="images/books/master-margarita-front.jpg" data-product-link="catalog.html"
+                        data-product-image="images/books/master-margarita-front.jpg" data-product-link="catalog.php"
                         data-product-price="720" data-product-title="Мастер и Маргарита">
                         <div aria-label="Обложка книги Мастер и Маргарита" class="product-card__image">Обложка книги
                         </div>
@@ -176,7 +145,7 @@
                         data-product-category-slug="self-development"
                         data-product-description="Практическая книга о том, как маленькие привычки приводят к большим результатам."
                         data-product-id="book-atomic-habits" data-product-image="images/books/atomic-habits-front.jpg"
-                        data-product-link="catalog.html" data-product-price="850" data-product-title="Атомные привычки">
+                        data-product-link="catalog.php" data-product-price="850" data-product-title="Атомные привычки">
                         <div aria-label="Обложка книги Атомные привычки" class="product-card__image">Обложка книги</div>
                         <div class="product-card__content">
                             <h3 class="product-card__title">Атомные привычки</h3>
@@ -195,7 +164,7 @@
                         data-product-category-slug="fantasy"
                         data-product-description="Известная история о школе магии, дружбе, взрослении и борьбе со злом."
                         data-product-id="book-harry-potter" data-product-image="images/books/harry-potter-front.jpg"
-                        data-product-link="catalog.html" data-product-price="910" data-product-title="Гарри Поттер">
+                        data-product-link="catalog.php" data-product-price="910" data-product-title="Гарри Поттер">
                         <div aria-label="Обложка книги Гарри Поттер" class="product-card__image">Обложка книги</div>
                         <div class="product-card__content">
                             <h3 class="product-card__title">Гарри Поттер</h3>
@@ -245,59 +214,12 @@
             <div class="container">
                 <div class="promo__container">
                     <h2 class="promo__title" id="promo-title">Скидка 10% на первый заказ</h2>
-                    <a class="btn btn--light" href="catalog.html">Выбрать книги</a>
+                    <a class="btn btn--light" href="catalog.php">Выбрать книги</a>
                 </div>
             </div>
         </section>
     </main>
-    <footer class="footer">
-        <div class="container">
-            <div class="footer__container">
-                <div class="footer__column">
-                    <h3 class="footer__title">BookMarket</h3>
-                    <p class="footer__text">
-                        Онлайн-магазин печатных книг для учёбы, отдыха и саморазвития.
-                    </p>
-                </div>
-                <div class="footer__column">
-                    <h3 class="footer__title">Разделы</h3>
-                    <ul class="footer__list">
-                        <li class="footer__item">
-                            <a class="footer__link" href="index.html">Главная</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link" href="catalog.html">Каталог</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link" href="contacts.php">Контакты</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer__column">
-                    <h3 class="footer__title">Покупателю</h3>
-                    <ul class="footer__list">
-                        <li class="footer__item">
-                            <a class="footer__link js-account-link" href="profile.php">Личный кабинет</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link" href="cart.html">Корзина</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link js-checkout-link" href="checkout.html">Оформление заказа</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer__column">
-                    <h3 class="footer__title">Контакты</h3>
-                    <address class="footer__address">
-                        <a class="footer__link" href="tel:+79001234567">+7 (900) 123-45-67</a><br />
-                        <a class="footer__link" href="mailto:bookmarket@mail.ru">bookmarket@mail.ru</a><br />
-                        г. Орёл
-                    </address>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
     <div aria-hidden="true" class="modal" id="quickViewModal">
         <div aria-labelledby="quickViewTitle" aria-modal="true" class="modal__content" role="dialog">
             <button aria-label="Закрыть окно" class="modal__close" type="button">×</button>

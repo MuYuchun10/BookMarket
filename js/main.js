@@ -79,7 +79,7 @@
     /* Создание ссылки на страницу книги */
     function buildBookPageUrl(productId) {
         const normalizedId = String(productId || '').trim();
-        return normalizedId ? `book.html?id=${encodeURIComponent(normalizedId)}` : 'book.html';
+        return normalizedId ? `book.php?id=${encodeURIComponent(normalizedId)}` : 'book.php';
     }
 
     /* Приведение товара к нормальному виду */
@@ -148,7 +148,7 @@
 
     /* Определение текущей HTML-страницы */
     function getCurrentPage() {
-        return window.location.pathname.split('/').pop() || 'index.html';
+        return window.location.pathname.split('/').pop() || 'index.php';
     }
 
     /* Нормализация объекта пользователя перед сохранением */
@@ -337,7 +337,7 @@
     /* Получение страницы, куда надо вернуть пользователя после входа */
     function getPostAuthTarget() {
         const target = new URLSearchParams(window.location.search).get('redirect');
-        return target && /\.html$/i.test(target) ? target : 'profile.php';
+        return target && /\.(html|php)$/i.test(target) ? target : 'profile.php';
     }
 
     /* Генерация имени по email, если имя явно не задано */
@@ -367,7 +367,7 @@
         });
 
         document.querySelectorAll('.js-checkout-link').forEach((link) => {
-            link.setAttribute('href', loggedIn ? 'checkout.html' : formatAuthRedirectUrl('checkout.html'));
+            link.setAttribute('href', loggedIn ? 'checkout.php' : formatAuthRedirectUrl('checkout.php'));
         });
     }
 
@@ -381,7 +381,7 @@
         return true;
     }
 
-    if (currentPage === 'checkout.html' && !isAuthenticated()) {
+    if (currentPage === 'checkout.php' && !isAuthenticated()) {
         redirectToAccount(currentPage, 'Чтобы открыть эту страницу, сначала войдите или зарегистрируйтесь');
         return false;
     }
@@ -515,7 +515,7 @@
             quantity,
             category: String(item.category || 'Книги').trim(),
             description: String(item.description || `Книга «${name}»`).trim(),
-            link: String(item.link || 'catalog.html').trim(),
+            link: String(item.link || 'catalog.php').trim(),
             image: String(item.image || '').trim(),
             available: item.available !== false,
             statusText: String(item.statusText || 'В наличии').trim()
@@ -689,7 +689,7 @@
                         <div class="cart-empty__content">
                             <h2 class="cart-empty__title">Корзина пока пуста</h2>
                             <p class="cart-empty__text">Добавьте книги из каталога, и они сразу появятся здесь. Корзина сохраняется в localStorage даже после перезагрузки страницы.</p>
-                            <a href="catalog.html" class="btn btn--accent">Перейти в каталог</a>
+                            <a href="catalog.php" class="btn btn--accent">Перейти в каталог</a>
                         </div>
                     </article>
                 `;
@@ -697,11 +697,11 @@
                 cartItems.classList.remove('cart-items--empty');
                 cartItems.innerHTML = this.items.map((item) => `
                     <article class="cart-item">
-                        <a href="${escapeHtml(item.link || 'catalog.html')}" class="cart-item__image" aria-label="Открыть страницу книги ${escapeHtml(item.name)}">
+                        <a href="${escapeHtml(item.link || 'catalog.php')}" class="cart-item__image" aria-label="Открыть страницу книги ${escapeHtml(item.name)}">
                             ${createCoverMarkup(item.name, 'cart-item__cover', item.image)}
                         </a>
                         <div class="cart-item__content">
-                            <h2 class="cart-item__title"><a href="${escapeHtml(item.link || 'catalog.html')}">${escapeHtml(item.name)}</a></h2>
+                            <h2 class="cart-item__title"><a href="${escapeHtml(item.link || 'catalog.php')}">${escapeHtml(item.name)}</a></h2>
                             <p class="cart-item__author">${escapeHtml(item.author || 'Неизвестный автор')}</p>
                             <p class="cart-item__status">${escapeHtml(item.statusText || 'В наличии')}</p>
                         </div>
@@ -846,7 +846,7 @@
         const categoryLink = document.querySelector('.breadcrumbs__link[href*="category="]');
         if (categoryLink) {
             categoryLink.textContent = product.category;
-            categoryLink.setAttribute('href', `catalog.html?category=${encodeURIComponent(product.categorySlug)}`);
+            categoryLink.setAttribute('href', `catalog.php?category=${encodeURIComponent(product.categorySlug)}`);
         }
 
         const badge = document.querySelector('.book-card__badge');
@@ -987,7 +987,7 @@
                             data-product-price="${product.price}"
                             data-product-category="${escapeHtml(product.category)}"
                             data-product-description="${escapeHtml(product.description)}"
-                            data-product-link="${escapeHtml(product.link || 'catalog.html')}"
+                            data-product-link="${escapeHtml(product.link || 'catalog.php')}"
                             data-product-image="${escapeHtml(product.image || '')}"
                             data-product-available="${product.available ? 'true' : 'false'}"
                             data-product-status="${escapeHtml(product.statusText)}"
@@ -1149,13 +1149,13 @@
                 }
 
                 if (!isAuthenticated()) {
-                    redirectToAccount('checkout.html', 'Чтобы перейти к оформлению заказа, сначала войдите или зарегистрируйтесь');
+                    redirectToAccount('checkout.php', 'Чтобы перейти к оформлению заказа, сначала войдите или зарегистрируйтесь');
                     return;
                 }
 
                 const added = tryAddProductToCart(product);
                 if (added) {
-                    window.location.href = 'checkout.html';
+                    window.location.href = 'checkout.php';
                 }
             });
         });
@@ -1209,7 +1209,7 @@
             emptyState.innerHTML = `
                 <h3 class="catalog-empty__title">По заданным параметрам книги не найдены</h3>
                 <p class="catalog-empty__text">Попробуйте убрать часть фильтров или выполните новый поиск по каталогу.</p>
-                <a class="btn btn--secondary" href="catalog.html">Сбросить фильтры</a>
+                <a class="btn btn--secondary" href="catalog.php">Сбросить фильтры</a>
             `;
             catalogProducts.after(emptyState);
         }

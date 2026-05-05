@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: account.php?redirect=checkout.php&notice=Чтобы оформить заказ, сначала войдите или зарегистрируйтесь');
+    exit;
+}
+?>
 <!DOCTYPE html>
 
 <html lang="ru">
@@ -17,38 +25,7 @@
 </head>
 
 <body class="page">
-    <header class="header">
-        <div class="container">
-            <div class="header__container">
-                <a aria-label="BookMarket — перейти на главную" class="logo" href="index.html">
-                    <span class="logo__icon">B</span>
-                    <span class="logo__content">
-                        <span class="logo__text">BookMarket</span>
-                        <span class="logo__subtitle">Интернет-магазин книг</span>
-                    </span>
-                </a>
-                <nav aria-label="Основная навигация" class="nav">
-                    <ul class="nav__list">
-                        <li class="nav__item">
-                            <a class="nav__link" href="index.html">Главная</a>
-                        </li>
-                        <li class="nav__item">
-                            <a class="nav__link" href="catalog.html">Каталог</a>
-                        </li>
-                        <li class="nav__item">
-                            <a class="nav__link" href="contacts.php">Контакты</a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="user-nav">
-                    <a class="user-nav__link js-account-link" href="profile.php">Личный кабинет</a>
-                    <a class="user-nav__link user-nav__link--accent" href="cart.html">
-                        Корзина (<span class="cart-count">0</span>)
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
     <main class="main">
         <section aria-labelledby="checkout-title" class="checkout-page">
             <div class="container">
@@ -123,54 +100,7 @@
             </div>
         </section>
     </main>
-    <footer class="footer">
-        <div class="container">
-            <div class="footer__container">
-                <div class="footer__column">
-                    <h3 class="footer__title">BookMarket</h3>
-                    <p class="footer__text">
-                        Онлайн-магазин печатных книг для учёбы, отдыха и саморазвития.
-                    </p>
-                </div>
-                <div class="footer__column">
-                    <h3 class="footer__title">Разделы</h3>
-                    <ul class="footer__list">
-                        <li class="footer__item">
-                            <a class="footer__link" href="index.html">Главная</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link" href="catalog.html">Каталог</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link" href="contacts.php">Контакты</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer__column">
-                    <h3 class="footer__title">Покупателю</h3>
-                    <ul class="footer__list">
-                        <li class="footer__item">
-                            <a class="footer__link js-account-link" href="profile.php">Личный кабинет</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link" href="cart.html">Корзина</a>
-                        </li>
-                        <li class="footer__item">
-                            <a class="footer__link js-checkout-link" href="checkout.html">Оформление заказа</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer__column">
-                    <h3 class="footer__title">Контакты</h3>
-                    <address class="footer__address">
-                        <a class="footer__link" href="tel:+79001234567">+7 (900) 123-45-67</a><br />
-                        <a class="footer__link" href="mailto:bookmarket@mail.ru">bookmarket@mail.ru</a><br />
-                        г. Орёл
-                    </address>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
     <script src="js/books-data.js"></script>
     <script src="js/main.js"></script>
 </body>

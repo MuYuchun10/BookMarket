@@ -11,10 +11,10 @@
                 <h3 class="footer__title">Разделы</h3>
                 <ul class="footer__list">
                     <li class="footer__item">
-                        <a class="footer__link" href="index.html">Главная</a>
+                        <a class="footer__link" href="index.php">Главная</a>
                     </li>
                     <li class="footer__item">
-                        <a class="footer__link" href="catalog.html">Каталог</a>
+                        <a class="footer__link" href="catalog.php">Каталог</a>
                     </li>
                     <li class="footer__item">
                         <a class="footer__link" href="contacts.php">Контакты</a>
@@ -28,10 +28,10 @@
                         <a class="footer__link" href="profile.php">Личный кабинет</a>
                     </li>
                     <li class="footer__item">
-                        <a class="footer__link" href="cart.html">Корзина</a>
+                        <a class="footer__link" href="cart.php">Корзина</a>
                     </li>
                     <li class="footer__item">
-                        <a class="footer__link js-checkout-link" href="checkout.html">Оформление заказа</a>
+                        <a class="footer__link js-checkout-link" href="checkout.php">Оформление заказа</a>
                     </li>
                 </ul>
             </div>

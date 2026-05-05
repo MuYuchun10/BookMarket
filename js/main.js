@@ -1,7 +1,6 @@
 ﻿(function () {
-    /* Ключи localStorage для корзины и данных пользователя */
+    /* Ключи localStorage для корзины и истории заказов */
     const STORAGE_KEY = 'bookMarketCart';
-    const AUTH_STORAGE_KEY = 'bookMarketUser';
     const ORDERS_STORAGE_KEY = 'bookMarketOrders';
     const PRODUCT_CATALOG = Array.isArray(window.BOOKMARKET_PRODUCTS) ? window.BOOKMARKET_PRODUCTS : [];
     const PRODUCT_INDEX = PRODUCT_CATALOG.reduce((accumulator, product) => {
@@ -146,62 +145,6 @@
         }, 2400);
     }
 
-    /* Определение текущей HTML-страницы */
-    function getCurrentPage() {
-        return window.location.pathname.split('/').pop() || 'index.php';
-    }
-
-    /* Нормализация объекта пользователя перед сохранением */
-    function normalizeAuthUser(user) {
-        if (!user || typeof user !== 'object') {
-            return null;
-        }
-
-        const name = String(user.name || '').trim();
-        const email = String(user.email || '').trim();
-
-        return {
-            name: name || 'Покупатель',
-            email,
-            phone: String(user.phone || '').trim(),
-            city: String(user.city || '').trim(),
-            address: String(user.address || '').trim(),
-            postcode: String(user.postcode || '').trim(),
-            street: String(user.street || '').trim(),
-            house: String(user.house || '').trim(),
-            flat: String(user.flat || '').trim()
-        };
-    }
-
-    /* Получение пользователя из localStorage */
-    function getAuthUser() {
-        try {
-            const saved = localStorage.getItem(AUTH_STORAGE_KEY);
-            return saved ? normalizeAuthUser(JSON.parse(saved)) : null;
-        } catch (error) {
-            return null;
-        }
-    }
-
-    /* Сохранение пользователя в localStorage */
-    function setAuthUser(user) {
-        const normalized = normalizeAuthUser(user);
-        if (!normalized) {
-            return;
-        }
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(normalized));
-    }
-
-    /* Удаление данных пользователя из localStorage */
-    function clearAuthUser() {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
-    }
-
-    /* Проверка, авторизован ли пользователь */
-    function isAuthenticated() {
-        return Boolean(getAuthUser());
-    }
-
     /* Нормализация позиции заказа */
     function normalizeOrderItem(item) {
         const normalizedItem = normalizeCartItem(item);
@@ -265,42 +208,9 @@
         localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
     }
 
-    /* Получение заказов текущего пользователя */
-    function getOrdersByUser(user) {
-        if (!user) {
-            return [];
-        }
-
-        const email = String(user.email || '').trim().toLowerCase();
-        const name = String(user.name || '').trim().toLowerCase();
-
-        return getStoredOrders()
-            .filter((order) => {
-                if (email && order.customerEmail) {
-                    return order.customerEmail === email;
-                }
-                return name && order.customerName.toLowerCase() === name;
-            })
-            .sort((first, second) => new Date(second.createdAt) - new Date(first.createdAt));
-    }
-
     /* Формирование id заказа */
     function createOrderId() {
         return `#${String(Date.now()).slice(-6)}`;
-    }
-
-    /* Форматирование даты заказа */
-    function formatOrderDate(value) {
-        const parsed = new Date(value);
-        if (Number.isNaN(parsed.getTime())) {
-            return 'Дата уточняется';
-        }
-
-        return new Intl.DateTimeFormat('ru-RU', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        }).format(parsed);
     }
 
     /* Сохранение нового заказа */
@@ -314,58 +224,6 @@
         orders.unshift(normalized);
         setStoredOrders(orders);
         return normalized;
-    }
-
-    /* Формирование ссылки на страницу входа с redirect и notice */
-    function formatAuthRedirectUrl(targetPage, notice) {
-        const params = new URLSearchParams();
-        if (targetPage) {
-            params.set('redirect', targetPage);
-        }
-        if (notice) {
-            params.set('notice', notice);
-        }
-        const query = params.toString();
-        return query ? `account.php?${query}` : 'account.php';
-    }
-
-    /* Перенаправление на страницу входа/регистрации */
-    function redirectToAccount(targetPage, notice) {
-        window.location.href = formatAuthRedirectUrl(targetPage, notice);
-    }
-
-    /* Получение страницы, куда надо вернуть пользователя после входа */
-    function getPostAuthTarget() {
-        const target = new URLSearchParams(window.location.search).get('redirect');
-        return target && /\.(html|php)$/i.test(target) ? target : 'profile.php';
-    }
-
-    /* Генерация имени по email, если имя явно не задано */
-    function humanizeNameFromEmail(email) {
-        const localPart = String(email || '')
-            .split('@')[0]
-            .replace(/[._-]+/g, ' ')
-            .trim();
-
-        if (!localPart) {
-            return 'Покупатель';
-        }
-
-        return localPart
-            .split(' ')
-            .filter(Boolean)
-            .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-            .join(' ');
-    }
-
-    /* Обновление ссылок кабинета и checkout в зависимости от авторизации */
-    function updateAuthAwareLinks() {
-        return;
-    }
-
-    /* Защита приватных страниц от неавторизованного доступа */
-    function enforceProtectedPageAccess() {
-        return true;
     }
 
     /* Генерация заглушки обложки книги в SVG */
@@ -1127,11 +985,6 @@
                     return;
                 }
 
-                if (!isAuthenticated()) {
-                    redirectToAccount('checkout.php', 'Чтобы перейти к оформлению заказа, сначала войдите или зарегистрируйтесь');
-                    return;
-                }
-
                 const added = tryAddProductToCart(product);
                 if (added) {
                     window.location.href = 'checkout.php';
@@ -1367,28 +1220,12 @@
         }
 
         const successBox = form.querySelector('.checkout-form__success');
-        const authUser = getAuthUser();
         renderCheckoutSummary();
-
-        if (authUser) {
-            const nameField = form.querySelector('#checkout-name');
-            const phoneField = form.querySelector('#checkout-phone');
-            const cityField = form.querySelector('#checkout-city');
-            const streetField = form.querySelector('#checkout-street');
-            const houseField = form.querySelector('#checkout-house');
-            const flatField = form.querySelector('#checkout-flat');
-
-            if (nameField && !nameField.value.trim()) nameField.value = authUser.name || '';
-            if (phoneField && !phoneField.value.trim()) phoneField.value = authUser.phone || '';
-            if (cityField && !cityField.value.trim()) cityField.value = authUser.city || '';
-            if (streetField && !streetField.value.trim()) streetField.value = authUser.street || authUser.address || '';
-            if (houseField && !houseField.value.trim()) houseField.value = authUser.house || '';
-            if (flatField && !flatField.value.trim()) flatField.value = authUser.flat || '';
-        }
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             clearErrors(form);
+
             if (successBox) {
                 successBox.classList.remove('show');
                 successBox.textContent = '';
@@ -1405,12 +1242,14 @@
             const street = form.querySelector('#checkout-street');
             const house = form.querySelector('#checkout-house');
             const flat = form.querySelector('#checkout-flat');
+
             let isValid = true;
 
             if (!name.value.trim()) {
                 showError(name, 'Укажите имя получателя');
                 isValid = false;
             }
+
             if (!phone.value.trim()) {
                 showError(phone, 'Введите номер телефона');
                 isValid = false;
@@ -1418,14 +1257,17 @@
                 showError(phone, 'Введите корректный номер телефона');
                 isValid = false;
             }
+
             if (!city.value.trim()) {
                 showError(city, 'Укажите город');
                 isValid = false;
             }
+
             if (!street.value.trim()) {
                 showError(street, 'Укажите улицу');
                 isValid = false;
             }
+
             if (!house.value.trim()) {
                 showError(house, 'Укажите номер дома');
                 isValid = false;
@@ -1435,29 +1277,12 @@
                 return;
             }
 
-            const currentUser = getAuthUser();
-            const nextUser = currentUser ? {
-                ...currentUser,
-                name: name.value.trim(),
-                phone: phone.value.trim(),
-                city: city.value.trim(),
-                address: `${street.value.trim()}, дом ${house.value.trim()}${flat.value.trim() ? `, кв. ${flat.value.trim()}` : ''}`,
-                street: street.value.trim(),
-                house: house.value.trim(),
-                flat: flat.value.trim()
-            } : null;
-
-            if (nextUser) {
-                setAuthUser(nextUser);
-                updateAuthAwareLinks();
-            }
-
             storeOrder({
                 id: createOrderId(),
                 createdAt: new Date().toISOString(),
                 status: 'Новый',
-                customerName: nextUser?.name || name.value.trim(),
-                customerEmail: nextUser?.email || '',
+                customerName: name.value.trim(),
+                customerEmail: '',
                 items: cart.items,
                 subtotal: cart.getSubtotal(),
                 discount: cart.getDiscount(),
@@ -1465,7 +1290,7 @@
             });
 
             if (successBox) {
-                successBox.textContent = 'Заказ успешно оформлен. Мы сохранили его в истории профиля и очистили корзину.';
+                successBox.textContent = 'Заказ успешно оформлен. Мы сохранили его в истории и очистили корзину.';
                 successBox.classList.add('show');
             }
 
@@ -1527,7 +1352,7 @@
         profileForm.dataset.bound = 'true';
     }
 
-    /* Синхронизация состояния между вкладками браузера */
+    /* Синхронизация состояния корзины между вкладками браузера */
     window.addEventListener('storage', function (event) {
         if (event.key === STORAGE_KEY) {
             cart.load();
@@ -1535,26 +1360,13 @@
             cart.renderCart();
             renderCheckoutSummary();
         }
-
-        if (event.key === AUTH_STORAGE_KEY) {
-            updateAuthAwareLinks();
-            if (!enforceProtectedPageAccess()) {
-                return;
-            }
-            initProfilePage();
-        }
-
-        if (event.key === ORDERS_STORAGE_KEY) {
-            initProfilePage();
-        }
     });
 
     /* Точка входа: инициализация приложения после загрузки DOM */
     document.addEventListener('DOMContentLoaded', function () {
         cart.load();
         cart.updateCounter();
-
-
+        
         initProductLinks();
         initBookPage();
         initStaticCoverPlaceholders();

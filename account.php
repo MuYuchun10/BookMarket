@@ -131,7 +131,6 @@ unset(
                                     <?php echo htmlspecialchars($registerErrors['confirm']); ?>
                                 </div>
                             <?php endif; ?>
-                            
                             <button class="auth-form__button auth-form__button--accent" type="submit">
                                 Создать аккаунт
                             </button>

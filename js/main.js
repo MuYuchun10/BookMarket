@@ -373,13 +373,21 @@
 
     /* Защита приватных страниц от неавторизованного доступа */
     function enforceProtectedPageAccess() {
-        const currentPage = getCurrentPage();
-        if ((currentPage === 'profile.php' || currentPage === 'checkout.html') && !isAuthenticated()) {
-            redirectToAccount(currentPage, 'Чтобы открыть эту страницу, сначала войдите или зарегистрируйтесь');
-            return false;
-        }
+    const currentPage = getCurrentPage();
+
+    // profile.php защищается на стороне PHP через $_SESSION,
+    // поэтому JS не должен дополнительно проверять localStorage.
+    if (currentPage === 'profile.php') {
         return true;
     }
+
+    if (currentPage === 'checkout.html' && !isAuthenticated()) {
+        redirectToAccount(currentPage, 'Чтобы открыть эту страницу, сначала войдите или зарегистрируйтесь');
+        return false;
+    }
+
+    return true;
+}
 
     /* Генерация заглушки обложки книги в SVG */
     function createCoverDataUrl(label, tone) {

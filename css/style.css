@@ -3009,17 +3009,17 @@ body.modal-open {
 }
 
 .contact-form__success {
-    display: none;
     padding: 14px 16px;
     border-radius: 18px;
     background-color: var(--color-success-bg);
     color: var(--color-success);
     font-size: 15px;
     font-weight: 600;
+    line-height: 1.4;
 }
 
-.contact-form__success.show {
-    display: block;
+.contact-form__success:empty {
+    display: none;
 }
 
 .error-message {

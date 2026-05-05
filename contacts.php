@@ -50,7 +50,7 @@ unset($_SESSION['contact_errors'], $_SESSION['contact_old'], $_SESSION['contact_
                     </ul>
                 </nav>
                 <div class="user-nav">
-                    <a class="user-nav__link js-account-link" href="profile.html">Личный кабинет</a>
+                    <a class="user-nav__link js-account-link" href="profile.php">Личный кабинет</a>
                     <a class="user-nav__link user-nav__link--accent" href="cart.html">
                         Корзина (<span class="cart-count">0</span>)
                     </a>
@@ -108,9 +108,11 @@ unset($_SESSION['contact_errors'], $_SESSION['contact_old'], $_SESSION['contact_
                         <h2 class="contact-form-card__title" id="feedback-title">Форма обратной связи</h2>
                         <form action="handlers/contact_handler.php" class="contact-form" method="post"
                             novalidate="novalidate">
-                            <div aria-live="polite" class="contact-form__success">
-                                <?php echo htmlspecialchars($success); ?>
-                            </div>
+                            <?php if (!empty($success)): ?>
+                                <div aria-live="polite" class="contact-form__success">
+                                    <?php echo htmlspecialchars($success); ?>
+                                </div>
+                            <?php endif; ?>
                             <div class="contact-form__group">
                                 <label class="visually-hidden" for="contact-name">Ваше имя</label>
                                 <input autocomplete="name" class="contact-form__input" id="contact-name" name="name"
@@ -195,7 +197,7 @@ unset($_SESSION['contact_errors'], $_SESSION['contact_old'], $_SESSION['contact_
                     <h3 class="footer__title">Покупателю</h3>
                     <ul class="footer__list">
                         <li class="footer__item">
-                            <a class="footer__link js-account-link" href="profile.html">Личный кабинет</a>
+                            <a class="footer__link js-account-link" href="profile.php">Личный кабинет</a>
                         </li>
                         <li class="footer__item">
                             <a class="footer__link" href="cart.html">Корзина</a>

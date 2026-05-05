@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+$loginErrors = $_SESSION['login_errors'] ?? [];
+$loginOld = $_SESSION['login_old'] ?? [];
+
+$registerErrors = $_SESSION['register_errors'] ?? [];
+$registerOld = $_SESSION['register_old'] ?? [];
+
+unset(
+    $_SESSION['login_errors'],
+    $_SESSION['login_old'],
+    $_SESSION['register_errors'],
+    $_SESSION['register_old']
+);
+?>
 <!DOCTYPE html>
 
 <html lang="ru">
@@ -35,13 +51,34 @@
                         <p class="auth-card__subtitle">
                             Введите email и пароль, чтобы войти в личный кабинет
                         </p>
-                        <form action="#" class="auth-form" method="post">
+                        <form action="handlers/login_handler.php" class="auth-form" method="post" novalidate>
                             <label class="visually-hidden" for="login-email">Email</label>
                             <input autocomplete="email" class="auth-form__input" id="login-email" name="email"
-                                placeholder="Email" required="" type="email" />
+                                placeholder="Email" required="" type="email"
+                                value="<?php echo htmlspecialchars($loginOld['email'] ?? ''); ?>" />
+
+                            <?php if (isset($loginErrors['email'])): ?>
+                                <div class="error-message">
+                                    <?php echo htmlspecialchars($loginErrors['email']); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <label class="visually-hidden" for="login-password">Пароль</label>
                             <input autocomplete="current-password" class="auth-form__input" id="login-password"
                                 name="password" placeholder="Пароль" required="" type="password" />
+
+                            <?php if (isset($loginErrors['password'])): ?>
+                                <div class="error-message">
+                                    <?php echo htmlspecialchars($loginErrors['password']); ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if (isset($loginErrors['login'])): ?>
+                                <div class="error-message">
+                                    <?php echo htmlspecialchars($loginErrors['login']); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <button class="auth-form__button auth-form__button--dark" type="submit">
                                 Войти
                             </button>
@@ -52,19 +89,49 @@
                         <p class="auth-card__subtitle">
                             Создайте аккаунт, чтобы сохранять данные и отслеживать заказы
                         </p>
-                        <form action="#" class="auth-form" method="post">
+                        <form action="handlers/register_handler.php" class="auth-form" method="post" novalidate>
                             <label class="visually-hidden" for="register-name">Имя</label>
                             <input autocomplete="name" class="auth-form__input" id="register-name" name="name"
-                                placeholder="Имя" required="" type="text" />
+                                placeholder="Имя" required="" type="text"
+                                value="<?php echo htmlspecialchars($registerOld['name'] ?? ''); ?>" />
+
+                            <?php if (isset($registerErrors['name'])): ?>
+                                <div class="error-message">
+                                    <?php echo htmlspecialchars($registerErrors['name']); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <label class="visually-hidden" for="register-email">Email</label>
                             <input autocomplete="email" class="auth-form__input" id="register-email" name="email"
-                                placeholder="Email" required="" type="email" />
+                                placeholder="Email" required="" type="email"
+                                value="<?php echo htmlspecialchars($registerOld['email'] ?? ''); ?>" />
+
+                            <?php if (isset($registerErrors['email'])): ?>
+                                <div class="error-message">
+                                    <?php echo htmlspecialchars($registerErrors['email']); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <label class="visually-hidden" for="register-password">Пароль</label>
                             <input autocomplete="new-password" class="auth-form__input" id="register-password"
                                 name="password" placeholder="Пароль" required="" type="password" />
+
+                            <?php if (isset($registerErrors['password'])): ?>
+                                <div class="error-message">
+                                    <?php echo htmlspecialchars($registerErrors['password']); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <label class="visually-hidden" for="register-password-repeat">Повторите пароль</label>
                             <input autocomplete="new-password" class="auth-form__input" id="register-password-repeat"
-                                name="password-repeat" placeholder="Повторите пароль" required="" type="password" />
+                                name="confirm_password" placeholder="Повторите пароль" required="" type="password" />
+
+                            <?php if (isset($registerErrors['confirm'])): ?>
+                                <div class="error-message">
+                                    <?php echo htmlspecialchars($registerErrors['confirm']); ?>
+                                </div>
+                            <?php endif; ?>
+                            
                             <button class="auth-form__button auth-form__button--accent" type="submit">
                                 Создать аккаунт
                             </button>
@@ -101,7 +168,7 @@
                     <h3 class="footer__title">Покупателю</h3>
                     <ul class="footer__list">
                         <li class="footer__item">
-                            <a class="footer__link js-account-link" href="profile.html">Личный кабинет</a>
+                            <a class="footer__link js-account-link" href="profile.php">Личный кабинет</a>
                         </li>
                         <li class="footer__item">
                             <a class="footer__link" href="cart.html">Корзина</a>

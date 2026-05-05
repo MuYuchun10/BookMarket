@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: account.php');
+    exit;
+}
+
+$userName = $_SESSION['user_name'] ?? 'Пользователь';
+$userEmail = $_SESSION['user_email'] ?? '';
+?>
 <!DOCTYPE html>
 
 <html lang="ru">
@@ -41,7 +52,7 @@
                     </ul>
                 </nav>
                 <div class="user-nav">
-                    <a class="user-nav__link js-account-link" href="profile.html">Личный кабинет</a>
+                    <a class="user-nav__link" href="profile.php">Личный кабинет</a>
                     <a class="user-nav__link user-nav__link--accent" href="cart.html">
                         Корзина (<span class="cart-count">0</span>)
                     </a>
@@ -57,12 +68,17 @@
                         <div aria-hidden="true" class="profile-hero__avatar">👤</div>
                         <div class="profile-hero__content">
                             <h1 class="profile-hero__title" id="profile-title">Личный кабинет</h1>
-                            <p class="profile-hero__text">Иван Петров · ivan@mail.ru</p>
+                            <p class="profile-hero__text">
+                                <?php echo htmlspecialchars($userName); ?>
+                                <?php if (!empty($userEmail)): ?>
+                                    · <?php echo htmlspecialchars($userEmail); ?>
+                                <?php endif; ?>
+                            </p>
                         </div>
                     </div>
-                    <button class="btn btn--primary profile-hero__button" type="button">
+                    <a class="btn btn--primary profile-hero__button" href="handlers/logout.php">
                         Выйти из аккаунта
-                    </button>
+                    </a>
                 </div>
                 <section aria-labelledby="profile-data-title" class="profile-card">
                     <div class="profile-section-heading">
@@ -72,10 +88,13 @@
                     <form action="#" class="profile-form" id="profile-form" method="post">
                         <label class="visually-hidden" for="profile-name">Имя</label>
                         <input autocomplete="name" class="profile-form__input" id="profile-name" name="name"
-                            placeholder="Имя" type="text" />
+                            placeholder="Имя" type="text" value="<?php echo htmlspecialchars($userName); ?>" />
+
                         <label class="visually-hidden" for="profile-email">Email</label>
                         <input autocomplete="email" class="profile-form__input" id="profile-email" name="email"
-                            placeholder="Email" type="email" />
+                            placeholder="Email" type="email" 
+                            value="<?php echo htmlspecialchars($userEmail); ?>" />
+
                         <label class="visually-hidden" for="profile-phone">Телефон</label>
                         <input autocomplete="tel" class="profile-form__input" id="profile-phone" name="phone"
                             placeholder="Телефон" type="tel" />
@@ -149,7 +168,7 @@
                     <h3 class="footer__title">Покупателю</h3>
                     <ul class="footer__list">
                         <li class="footer__item">
-                            <a class="footer__link js-account-link" href="profile.html">Личный кабинет</a>
+                            <a class="footer__link" href="profile.php">Личный кабинет</a>
                         </li>
                         <li class="footer__item">
                             <a class="footer__link" href="cart.html">Корзина</a>

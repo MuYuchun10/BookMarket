@@ -326,7 +326,7 @@
             params.set('notice', notice);
         }
         const query = params.toString();
-        return query ? `account.html?${query}` : 'account.html';
+        return query ? `account.php?${query}` : 'account.php';
     }
 
     /* Перенаправление на страницу входа/регистрации */
@@ -337,7 +337,7 @@
     /* Получение страницы, куда надо вернуть пользователя после входа */
     function getPostAuthTarget() {
         const target = new URLSearchParams(window.location.search).get('redirect');
-        return target && /\.html$/i.test(target) ? target : 'profile.html';
+        return target && /\.html$/i.test(target) ? target : 'profile.php';
     }
 
     /* Генерация имени по email, если имя явно не задано */
@@ -363,7 +363,7 @@
         const loggedIn = isAuthenticated();
 
         document.querySelectorAll('.js-account-link').forEach((link) => {
-            link.setAttribute('href', loggedIn ? 'profile.html' : formatAuthRedirectUrl('profile.html'));
+            link.setAttribute('href', loggedIn ? 'profile.php' : formatAuthRedirectUrl('profile.php'));
         });
 
         document.querySelectorAll('.js-checkout-link').forEach((link) => {
@@ -374,7 +374,7 @@
     /* Защита приватных страниц от неавторизованного доступа */
     function enforceProtectedPageAccess() {
         const currentPage = getCurrentPage();
-        if ((currentPage === 'profile.html' || currentPage === 'checkout.html') && !isAuthenticated()) {
+        if ((currentPage === 'profile.php' || currentPage === 'checkout.html') && !isAuthenticated()) {
             redirectToAccount(currentPage, 'Чтобы открыть эту страницу, сначала войдите или зарегистрируйтесь');
             return false;
         }
@@ -1488,115 +1488,6 @@
         });
     }
 
-    /* Логика страницы входа и регистрации */
-    function initAccountPage() {
-        const authForms = document.querySelectorAll('.auth-form');
-        if (!authForms.length) {
-            return;
-        }
-
-        const [loginForm, registerForm] = authForms;
-        const params = new URLSearchParams(window.location.search);
-        const notice = params.get('notice');
-        const redirectTarget = getPostAuthTarget();
-
-        if (notice) {
-            showToast(notice);
-        }
-
-        if (loginForm) {
-            loginForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                clearErrors(loginForm);
-
-                const email = loginForm.querySelector('#login-email');
-                const password = loginForm.querySelector('#login-password');
-                let isValid = true;
-
-                if (!email.value.trim()) {
-                    showError(email, 'Введите email');
-                    isValid = false;
-                } else if (!isValidEmail(email.value.trim())) {
-                    showError(email, 'Введите корректный email');
-                    isValid = false;
-                }
-
-                if (!password.value.trim()) {
-                    showError(password, 'Введите пароль');
-                    isValid = false;
-                } else if (password.value.trim().length < 6) {
-                    showError(password, 'Пароль должен содержать минимум 6 символов');
-                    isValid = false;
-                }
-
-                if (!isValid) {
-                    return;
-                }
-
-                const currentUser = getAuthUser();
-                const nextUser = {
-                    ...(currentUser || {}),
-                    name: currentUser?.name || humanizeNameFromEmail(email.value.trim()),
-                    email: email.value.trim()
-                };
-
-                setAuthUser(nextUser);
-                updateAuthAwareLinks();
-                window.location.href = redirectTarget;
-            });
-        }
-
-        if (registerForm) {
-            registerForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                clearErrors(registerForm);
-
-                const name = registerForm.querySelector('#register-name');
-                const email = registerForm.querySelector('#register-email');
-                const password = registerForm.querySelector('#register-password');
-                const repeat = registerForm.querySelector('#register-password-repeat');
-                let isValid = true;
-
-                if (!name.value.trim()) {
-                    showError(name, 'Введите имя');
-                    isValid = false;
-                }
-                if (!email.value.trim()) {
-                    showError(email, 'Введите email');
-                    isValid = false;
-                } else if (!isValidEmail(email.value.trim())) {
-                    showError(email, 'Введите корректный email');
-                    isValid = false;
-                }
-                if (!password.value.trim()) {
-                    showError(password, 'Введите пароль');
-                    isValid = false;
-                } else if (password.value.trim().length < 6) {
-                    showError(password, 'Пароль должен содержать минимум 6 символов');
-                    isValid = false;
-                }
-                if (!repeat.value.trim()) {
-                    showError(repeat, 'Повторите пароль');
-                    isValid = false;
-                } else if (repeat.value !== password.value) {
-                    showError(repeat, 'Пароли не совпадают');
-                    isValid = false;
-                }
-
-                if (!isValid) {
-                    return;
-                }
-
-                setAuthUser({
-                    name: name.value.trim(),
-                    email: email.value.trim()
-                });
-                updateAuthAwareLinks();
-                window.location.href = redirectTarget;
-            });
-        }
-    }
-
     /* Логика страницы профиля */
     function initProfilePage() {
         const profilePage = document.querySelector('.profile-page');
@@ -1718,7 +1609,7 @@
             logoutButton.addEventListener('click', function () {
                 clearAuthUser();
                 updateAuthAwareLinks();
-                window.location.href = 'account.html';
+                window.location.href = 'account.php';
             });
             logoutButton.dataset.bound = 'true';
         }
@@ -1768,7 +1659,6 @@
         initBuyNowButtons();
         initCatalogControls();
         initCheckoutPage();
-        initAccountPage();
         initProfilePage();
     });
 })();

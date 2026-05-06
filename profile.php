@@ -61,8 +61,7 @@ $userEmail = $_SESSION['user_email'] ?? '';
 
                         <label class="visually-hidden" for="profile-email">Email</label>
                         <input autocomplete="email" class="profile-form__input" id="profile-email" name="email"
-                            placeholder="Email" type="email" 
-                            value="<?php echo htmlspecialchars($userEmail); ?>" />
+                            placeholder="Email" type="email" value="<?php echo htmlspecialchars($userEmail); ?>" />
 
                         <label class="visually-hidden" for="profile-phone">Телефон</label>
                         <input autocomplete="tel" class="profile-form__input" id="profile-phone" name="phone"
@@ -86,25 +85,8 @@ $userEmail = $_SESSION['user_email'] ?? '';
                         <span aria-hidden="true" class="profile-section-heading__icon">📦</span>
                         <h2 class="profile-section-heading__title" id="profile-orders-title">История заказов</h2>
                     </div>
-                    <div class="orders-list">
-                        <article class="order-row">
-                            <div class="order-row__id">#10021</div>
-                            <div class="order-row__count">2 книги</div>
-                            <div class="order-row__price">2 540 ₽</div>
-                            <div class="order-row__status">Доставлен</div>
-                        </article>
-                        <article class="order-row">
-                            <div class="order-row__id">#10018</div>
-                            <div class="order-row__count">1 книга</div>
-                            <div class="order-row__price">720 ₽</div>
-                            <div class="order-row__status">В обработке</div>
-                        </article>
-                        <article class="order-row">
-                            <div class="order-row__id">#10012</div>
-                            <div class="order-row__count">3 книги</div>
-                            <div class="order-row__price">3 180 ₽</div>
-                            <div class="order-row__status">Отправлен</div>
-                        </article>
+                    <div class="orders-list" id="profile-orders">
+                        <p class="orders-list__empty">История заказов пока пуста.</p>
                     </div>
                 </section>
             </div>

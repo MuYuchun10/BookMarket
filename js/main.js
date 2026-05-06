@@ -145,6 +145,37 @@
         }, 2400);
     }
 
+    /* Рендер заказов */
+    function renderProfileOrders() {
+        const ordersContainer = document.getElementById('profile-orders');
+
+        if (!ordersContainer) {
+            return;
+        }
+
+        const orders = getStoredOrders();
+
+        if (!orders.length) {
+            ordersContainer.innerHTML = '<p class="orders-list__empty">История заказов пока пуста.</p>';
+            return;
+        }
+
+        ordersContainer.innerHTML = orders.map((order) => {
+            const booksCount = order.items.reduce((sum, item) => sum + item.quantity, 0);
+
+            return `
+            <article class="order-row">
+                <div class="order-row__id">${escapeHtml(order.id)}</div>
+                <div class="order-row__count">
+                    ${booksCount} ${pluralize(booksCount, 'книга', 'книги', 'книг')}
+                </div>
+                <div class="order-row__price">${formatPrice(order.total)}</div>
+                <div class="order-row__status">${escapeHtml(order.status)}</div>
+            </article>
+        `;
+        }).join('');
+    }
+
     /* Нормализация позиции заказа */
     function normalizeOrderItem(item) {
         const normalizedItem = normalizeCartItem(item);
@@ -1308,6 +1339,8 @@
             return;
         }
 
+        renderProfileOrders();
+
         const profileForm = profilePage.querySelector('#profile-form');
 
         if (!profileForm || profileForm.dataset.bound === 'true') {
@@ -1366,7 +1399,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         cart.load();
         cart.updateCounter();
-        
+
         initProductLinks();
         initBookPage();
         initStaticCoverPlaceholders();

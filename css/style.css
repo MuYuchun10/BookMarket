@@ -507,6 +507,10 @@ img {
     transition: transform var(--transition), box-shadow var(--transition);
 }
 
+.product-card[hidden] {
+    display: none !important;
+}
+
 .product-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);

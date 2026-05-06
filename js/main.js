@@ -1110,11 +1110,11 @@
     function initCatalogControls() {
         const form = document.querySelector('.catalog-filter-form');
         const catalogProducts = document.querySelector('.catalog-products');
+
         if (!form || !catalogProducts) {
             return;
         }
 
-        const cards = Array.from(catalogProducts.querySelectorAll('.product-card'));
         const title = document.querySelector('.catalog-toolbar__title');
         const text = document.querySelector('.catalog-toolbar__text');
         const sortButtons = Array.from(document.querySelectorAll('.sort-btn[data-sort]'));
@@ -1127,6 +1127,7 @@
         }
 
         let sortField = form.querySelector('input[name="sort"]');
+
         if (!sortField) {
             sortField = document.createElement('input');
             sortField.type = 'hidden';
@@ -1134,64 +1135,83 @@
             form.appendChild(sortField);
         }
 
-        const currentSort = params.get('sort') || 'price-asc';
-        sortField.value = currentSort;
+        sortField.value = params.get('sort') || 'price-asc';
 
         Array.from(form.elements).forEach((field) => {
             if (!field.name || field.type === 'submit' || field.type === 'reset' || field.name === 'sort') {
                 return;
             }
+
             if (params.has(field.name)) {
                 field.value = params.get(field.name);
             }
         });
 
         let emptyState = document.querySelector('.catalog-empty');
+
         if (!emptyState) {
             emptyState = document.createElement('div');
             emptyState.className = 'catalog-empty';
             emptyState.hidden = true;
             emptyState.innerHTML = `
-                <h3 class="catalog-empty__title">По заданным параметрам книги не найдены</h3>
-                <p class="catalog-empty__text">Попробуйте убрать часть фильтров или выполните новый поиск по каталогу.</p>
-                <a class="btn btn--secondary" href="catalog.php">Сбросить фильтры</a>
-            `;
+            <h3 class="catalog-empty__title">По заданным параметрам книги не найдены</h3>
+            <p class="catalog-empty__text">Попробуйте убрать часть фильтров или выполните новый поиск по каталогу.</p>
+            <a class="btn btn--secondary" href="catalog.php">Сбросить фильтры</a>
+        `;
             catalogProducts.after(emptyState);
         }
 
+        function getCards() {
+            return Array.from(catalogProducts.querySelectorAll('.product-card'));
+        }
+
+        function getNumberFieldValue(name) {
+            const value = Number(form.querySelector(`[name="${name}"]`)?.value || 0);
+            return Number.isFinite(value) ? value : 0;
+        }
+
         function collectFilters() {
-            const legacyPrice = Number(params.get('price') || 0);
             return {
                 query: (form.querySelector('[name="query"]')?.value || '').trim().toLowerCase(),
                 category: (form.querySelector('[name="category"]')?.value || '').trim(),
                 author: (form.querySelector('[name="author"]')?.value || '').trim().toLowerCase(),
-                priceFrom: Number(form.querySelector('[name="price-from"]')?.value || 0),
-                priceTo: Number(form.querySelector('[name="price-to"]')?.value || legacyPrice),
+                priceFrom: getNumberFieldValue('price-from'),
+                priceTo: getNumberFieldValue('price-to'),
                 sort: sortField.value || 'price-asc'
             };
         }
 
         function matchesFilters(card, filters) {
             const product = getProductData(card);
-            const title = product.name.toLowerCase();
-            const author = product.author.toLowerCase();
-            const categorySlug = card.dataset.productCategorySlug || slugify(product.category);
 
-            if (filters.query && !title.includes(filters.query)) {
+            if (!product) {
                 return false;
             }
-            if (filters.category && categorySlug !== filters.category) {
+
+            const productTitle = product.name.toLowerCase();
+            const productAuthor = product.author.toLowerCase();
+            const productCategorySlug = card.dataset.productCategorySlug || product.categorySlug || slugify(product.category);
+
+            if (filters.query && !productTitle.includes(filters.query)) {
                 return false;
             }
-            if (filters.author && !author.includes(filters.author)) {
+
+            if (filters.category && productCategorySlug !== filters.category) {
                 return false;
             }
+
+            if (filters.author && !productAuthor.includes(filters.author)) {
+                return false;
+            }
+
             if (filters.priceFrom && product.price < filters.priceFrom) {
                 return false;
             }
+
             if (filters.priceTo && product.price > filters.priceTo) {
                 return false;
             }
+
             return true;
         }
 
@@ -1199,85 +1219,141 @@
             if (title) {
                 title.textContent = `Найдено ${count} ${pluralize(count, 'книга', 'книги', 'книг')}`;
             }
-            if (text) {
-                const parts = [];
-                if (filters.query) {
-                    parts.push(`название «${filters.query}»`);
-                }
-                if (filters.category) {
-                    const categoryOption = form.querySelector(`[name="category"] option[value="${filters.category}"]`);
-                    if (categoryOption) {
-                        parts.push(`категория «${categoryOption.textContent.trim()}»`);
-                    }
-                }
-                if (filters.author) {
-                    parts.push(`автор «${filters.author}»`);
-                }
-                if (filters.priceFrom || filters.priceTo) {
-                    const from = filters.priceFrom ? `от ${filters.priceFrom}` : '';
-                    const to = filters.priceTo ? `до ${filters.priceTo}` : '';
-                    parts.push(`цена ${[from, to].filter(Boolean).join(' ')}`.trim());
-                }
-                text.textContent = parts.length ? `Активные фильтры: ${parts.join(', ')}` : 'Фильтры можно комбинировать';
+
+            if (!text) {
+                return;
             }
+
+            const parts = [];
+
+            if (filters.query) {
+                parts.push(`название «${filters.query}»`);
+            }
+
+            if (filters.category) {
+                const categoryOption = Array.from(form.querySelectorAll('[name="category"] option'))
+                    .find((option) => option.value === filters.category);
+
+                if (categoryOption) {
+                    parts.push(`категория «${categoryOption.textContent.trim()}»`);
+                }
+            }
+
+            if (filters.author) {
+                parts.push(`автор «${filters.author}»`);
+            }
+
+            if (filters.priceFrom || filters.priceTo) {
+                const from = filters.priceFrom ? `от ${filters.priceFrom}` : '';
+                const to = filters.priceTo ? `до ${filters.priceTo}` : '';
+                parts.push(`цена ${[from, to].filter(Boolean).join(' ')}`.trim());
+            }
+
+            text.textContent = parts.length
+                ? `Активные фильтры: ${parts.join(', ')}`
+                : 'Фильтры можно комбинировать';
         }
 
-        function applyFilters() {
-            const filters = collectFilters();
-            const visibleCards = cards.filter((card) => matchesFilters(card, filters));
+        function updateSortButtons(activeSort) {
+            sortButtons.forEach((button) => {
+                const isActive = button.dataset.sort === activeSort;
 
-            visibleCards.sort((a, b) => {
-                const first = getProductData(a).price;
-                const second = getProductData(b).price;
-                return filters.sort === 'price-desc' ? second - first : first - second;
+                button.classList.toggle('sort-btn--active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
             });
+        }
+
+        function buildFilterParams(filters) {
+            const nextParams = new URLSearchParams();
+
+            if (filters.query) {
+                nextParams.set('query', filters.query);
+            }
+
+            if (filters.category) {
+                nextParams.set('category', filters.category);
+            }
+
+            if (filters.author) {
+                nextParams.set('author', filters.author);
+            }
+
+            if (filters.priceFrom) {
+                nextParams.set('price-from', String(filters.priceFrom));
+            }
+
+            if (filters.priceTo) {
+                nextParams.set('price-to', String(filters.priceTo));
+            }
+
+            if (filters.sort && filters.sort !== 'price-asc') {
+                nextParams.set('sort', filters.sort);
+            }
+
+            return nextParams;
+        }
+
+        function applyFilters(shouldUpdateUrl = false) {
+            const filters = collectFilters();
+            const cards = getCards();
+
+            const visibleCards = cards
+                .filter((card) => matchesFilters(card, filters))
+                .sort((a, b) => {
+                    const firstPrice = getProductData(a).price;
+                    const secondPrice = getProductData(b).price;
+
+                    return filters.sort === 'price-desc'
+                        ? secondPrice - firstPrice
+                        : firstPrice - secondPrice;
+                });
 
             cards.forEach((card) => {
                 card.hidden = true;
             });
+
             visibleCards.forEach((card) => {
                 card.hidden = false;
                 catalogProducts.appendChild(card);
             });
 
             emptyState.hidden = visibleCards.length > 0;
+
             updateToolbar(filters, visibleCards.length);
+            updateSortButtons(filters.sort);
 
-            sortButtons.forEach((button) => {
-                const active = button.dataset.sort === filters.sort;
-                button.classList.toggle('sort-btn--active', active);
-                button.setAttribute('aria-pressed', String(active));
-            });
+            if (shouldUpdateUrl) {
+                updateUrlFromParams(buildFilterParams(filters));
+            }
         }
-
-        sortButtons.forEach((button) => {
-            button.addEventListener('click', function () {
-                sortField.value = this.dataset.sort;
-                const newParams = new URLSearchParams(new FormData(form));
-                updateUrlFromParams(newParams);
-                applyFilters();
-            });
-        });
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-            const newParams = new URLSearchParams(new FormData(form));
-            updateUrlFromParams(newParams);
-            applyFilters();
+            applyFilters(true);
+        });
+
+        sortButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                sortField.value = this.dataset.sort || 'price-asc';
+                applyFilters(true);
+            });
         });
 
         const clearLink = form.querySelector('.catalog-filter__clear');
+
         if (clearLink) {
             clearLink.addEventListener('click', function (event) {
                 event.preventDefault();
+
                 form.reset();
                 sortField.value = 'price-asc';
+
                 updateUrlFromParams(new URLSearchParams());
-                applyFilters();
+                applyFilters(false);
             });
         }
 
-        applyFilters();
+        applyFilters(false);
     }
 
     /* Перерисовка сводки заказа на checkout-странице */

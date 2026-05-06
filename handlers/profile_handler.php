@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../data/user_storage.php';
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../account.php');
     exit;
@@ -18,6 +20,7 @@ $city = trim($_POST['city'] ?? '');
 $address = trim($_POST['address'] ?? '');
 $postcode = trim($_POST['postcode'] ?? '');
 
+$currentEmail = $_SESSION['user_email'] ?? '';
 $errors = [];
 
 if (empty($name)) {
@@ -28,6 +31,11 @@ if (empty($email)) {
     $errors['email'] = 'Введите email';
 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors['email'] = 'Введите корректный email';
+} elseif (
+    normalizeUserEmail($email) !== normalizeUserEmail($currentEmail)
+    && getUserByEmail($email)
+) {
+    $errors['email'] = 'Пользователь с таким email уже существует';
 }
 
 if (!empty($phone)) {
@@ -57,12 +65,26 @@ if (!empty($errors)) {
     exit;
 }
 
-$_SESSION['user_name'] = $name;
-$_SESSION['user_email'] = $email;
-$_SESSION['profile_phone'] = $phone;
-$_SESSION['profile_city'] = $city;
-$_SESSION['profile_address'] = $address;
-$_SESSION['profile_postcode'] = $postcode;
+$oldUser = getUserByEmail($currentEmail) ?? [];
+
+if (
+    !empty($currentEmail)
+    && normalizeUserEmail($currentEmail) !== normalizeUserEmail($email)
+) {
+    deleteUserByEmail($currentEmail);
+}
+
+$user = saveUserData($email, [
+    'id' => $_SESSION['user_id'],
+    'name' => $name,
+    'password_hash' => $oldUser['password_hash'] ?? password_hash('123456', PASSWORD_DEFAULT),
+    'phone' => $phone,
+    'city' => $city,
+    'address' => $address,
+    'postcode' => $postcode
+]);
+
+putUserIntoSession($user);
 
 unset($_SESSION['profile_errors'], $_SESSION['profile_old']);
 

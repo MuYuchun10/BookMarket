@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../data/user_storage.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../account.php');
     exit;
@@ -29,10 +31,12 @@ if (empty($password)) {
 }
 
 if (empty($errors)) {
-    if ($email === 'admin@admin.com' && $password === '123456') {
-        $_SESSION['user_id'] = 1;
-        $_SESSION['user_name'] = 'Администратор';
-        $_SESSION['user_email'] = $email;
+    ensureDefaultAdminUser();
+
+    $user = getUserByEmail($email);
+
+    if ($user && password_verify($password, $user['password_hash'] ?? '')) {
+        putUserIntoSession($user);
 
         header('Location: ../' . $redirectTarget);
         exit;

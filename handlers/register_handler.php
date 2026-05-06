@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../data/user_storage.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../account.php');
     exit;
@@ -28,6 +30,8 @@ if (empty($email)) {
     $errors['email'] = 'Email обязателен';
 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors['email'] = 'Некорректный email';
+} elseif (getUserByEmail($email)) {
+    $errors['email'] = 'Пользователь с таким email уже зарегистрирован';
 }
 
 if (empty($password)) {
@@ -55,11 +59,17 @@ if (!empty($errors)) {
     exit;
 }
 
-$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+$user = saveUserData($email, [
+    'id' => time(),
+    'name' => $name,
+    'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+    'phone' => '',
+    'city' => '',
+    'address' => '',
+    'postcode' => ''
+]);
 
-$_SESSION['user_id'] = 1;
-$_SESSION['user_name'] = $name;
-$_SESSION['user_email'] = $email;
+putUserIntoSession($user);
 
 header('Location: ../' . $redirectTarget);
 exit;

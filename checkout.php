@@ -10,6 +10,15 @@ if (!isset($_SESSION['user_id'])) {
 $checkoutErrors = $_SESSION['checkout_errors'] ?? [];
 $checkoutOld = $_SESSION['checkout_old'] ?? [];
 
+$checkoutName = $checkoutOld['name'] ?? ($_SESSION['user_name'] ?? '');
+$checkoutPhone = $checkoutOld['phone'] ?? ($_SESSION['profile_phone'] ?? '');
+$checkoutCity = $checkoutOld['city'] ?? ($_SESSION['profile_city'] ?? '');
+
+$checkoutStreet = $checkoutOld['street'] ?? '';
+$checkoutHouse = $checkoutOld['house'] ?? '';
+$checkoutFlat = $checkoutOld['flat'] ?? '';
+$checkoutComment = $checkoutOld['comment'] ?? '';
+
 unset($_SESSION['checkout_errors'], $_SESSION['checkout_old']);
 ?>
 <!DOCTYPE html>
@@ -58,7 +67,7 @@ unset($_SESSION['checkout_errors'], $_SESSION['checkout_old']);
                                 <input autocomplete="name"
                                     class="checkout-form__input <?php echo isset($checkoutErrors['name']) ? 'input-error' : ''; ?>"
                                     id="checkout-name" name="name" placeholder="Имя получателя" required type="text"
-                                    value="<?php echo htmlspecialchars($checkoutOld['name'] ?? ''); ?>" />
+                                    value="<?php echo htmlspecialchars($checkoutName); ?>" />
                                 <?php if (isset($checkoutErrors['name'])): ?>
                                     <div class="error-message">
                                         <?php echo htmlspecialchars($checkoutErrors['name']); ?>
@@ -71,7 +80,7 @@ unset($_SESSION['checkout_errors'], $_SESSION['checkout_old']);
                                 <input autocomplete="tel"
                                     class="checkout-form__input <?php echo isset($checkoutErrors['phone']) ? 'input-error' : ''; ?>"
                                     id="checkout-phone" name="phone" placeholder="Номер телефона" required type="tel"
-                                    value="<?php echo htmlspecialchars($checkoutOld['phone'] ?? ''); ?>" />
+                                    value="<?php echo htmlspecialchars($checkoutPhone); ?>" />
                                 <?php if (isset($checkoutErrors['phone'])): ?>
                                     <div class="error-message">
                                         <?php echo htmlspecialchars($checkoutErrors['phone']); ?>
@@ -84,7 +93,7 @@ unset($_SESSION['checkout_errors'], $_SESSION['checkout_old']);
                                 <input autocomplete="address-level2"
                                     class="checkout-form__input <?php echo isset($checkoutErrors['city']) ? 'input-error' : ''; ?>"
                                     id="checkout-city" name="city" placeholder="Город" required type="text"
-                                    value="<?php echo htmlspecialchars($checkoutOld['city'] ?? ''); ?>" />
+                                    value="<?php echo htmlspecialchars($checkoutCity); ?>" />
                                 <?php if (isset($checkoutErrors['city'])): ?>
                                     <div class="error-message">
                                         <?php echo htmlspecialchars($checkoutErrors['city']); ?>
@@ -97,7 +106,7 @@ unset($_SESSION['checkout_errors'], $_SESSION['checkout_old']);
                                 <input autocomplete="street-address"
                                     class="checkout-form__input <?php echo isset($checkoutErrors['street']) ? 'input-error' : ''; ?>"
                                     id="checkout-street" name="street" placeholder="Улица" required type="text"
-                                    value="<?php echo htmlspecialchars($checkoutOld['street'] ?? ''); ?>" />
+                                    value="<?php echo htmlspecialchars($checkoutStreet); ?>" />
                                 <?php if (isset($checkoutErrors['street'])): ?>
                                     <div class="error-message">
                                         <?php echo htmlspecialchars($checkoutErrors['street']); ?>
@@ -110,7 +119,7 @@ unset($_SESSION['checkout_errors'], $_SESSION['checkout_old']);
                                 <input
                                     class="checkout-form__input <?php echo isset($checkoutErrors['house']) ? 'input-error' : ''; ?>"
                                     id="checkout-house" name="house" placeholder="Дом" required type="text"
-                                    value="<?php echo htmlspecialchars($checkoutOld['house'] ?? ''); ?>" />
+                                    value="<?php echo htmlspecialchars($checkoutHouse); ?>" />
                                 <?php if (isset($checkoutErrors['house'])): ?>
                                     <div class="error-message">
                                         <?php echo htmlspecialchars($checkoutErrors['house']); ?>
@@ -122,13 +131,13 @@ unset($_SESSION['checkout_errors'], $_SESSION['checkout_old']);
                                 <label class="visually-hidden" for="checkout-flat">Квартира</label>
                                 <input class="checkout-form__input" id="checkout-flat" name="flat"
                                     placeholder="Квартира" type="text"
-                                    value="<?php echo htmlspecialchars($checkoutOld['flat'] ?? ''); ?>" />
+                                    value="<?php echo htmlspecialchars($checkoutFlat); ?>" />
                             </div>
 
                             <div class="checkout-form__group checkout-form__group--full">
                                 <label class="visually-hidden" for="checkout-comment">Комментарий к заказу</label>
                                 <textarea class="checkout-form__textarea" id="checkout-comment" name="comment"
-                                    placeholder="Комментарий к заказу"><?php echo htmlspecialchars($checkoutOld['comment'] ?? ''); ?></textarea>
+                                    placeholder="Комментарий к заказу"><?php echo htmlspecialchars($checkoutComment); ?></textarea>
                             </div>
                             
                             <div class="checkout-options">

@@ -1,0 +1,22 @@
+{
+    "aalkovic735@gmail.com": {
+        "id": 1778064358,
+        "name": "Андрей",
+        "password_hash": "$2y$10$skYbgkLPvZ79ouxfs1NSI.Ckf0HzKVWf0T4YlWPdvs1QLO8L.LAZ2",
+        "phone": "89103034223",
+        "city": "Орёл",
+        "address": "ул. 6-ой Орловской дивизии, 11",
+        "postcode": "303760",
+        "email": "aalkovic735@gmail.com"
+    },
+    "admin@admin.com": {
+        "id": 1,
+        "name": "Администратор",
+        "password_hash": "$2y$10$stIFHeobUFhrEFAJyLF86OUX4AYAzvv2nN3HRjEXsTeak5gH8IAhe",
+        "phone": "",
+        "city": "",
+        "address": "",
+        "postcode": "",
+        "email": "admin@admin.com"
+    }
+}

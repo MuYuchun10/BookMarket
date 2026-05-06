@@ -390,6 +390,88 @@
         };
     }
 
+    /* Генерация карточки товара */
+    function createProductCardMarkup(product) {
+        const normalizedProduct = enrichProductData(product);
+
+        if (!normalizedProduct) {
+            return '';
+        }
+
+        const productUrl = buildBookPageUrl(normalizedProduct.id);
+        const statusClass = normalizedProduct.available ? '' : ' product-card__status--out';
+
+        return `
+        <article
+            class="product-card"
+            data-product-id="${escapeHtml(normalizedProduct.id)}"
+            data-product-title="${escapeHtml(normalizedProduct.name)}"
+            data-product-author="${escapeHtml(normalizedProduct.author)}"
+            data-product-price="${normalizedProduct.price}"
+            data-product-category="${escapeHtml(normalizedProduct.category)}"
+            data-product-category-slug="${escapeHtml(normalizedProduct.categorySlug)}"
+            data-product-description="${escapeHtml(normalizedProduct.description)}"
+            data-product-image="${escapeHtml(normalizedProduct.images.front || normalizedProduct.image || '')}"
+            data-product-link="${escapeHtml(productUrl)}"
+            data-product-available="${normalizedProduct.available ? 'true' : 'false'}"
+            data-product-status="${escapeHtml(normalizedProduct.statusText)}"
+        >
+            <a
+                aria-label="Открыть страницу книги ${escapeHtml(normalizedProduct.name)}"
+                class="product-card__image"
+                href="${escapeHtml(productUrl)}"
+            >
+                Обложка книги
+            </a>
+
+            <div class="product-card__content">
+                <h3 class="product-card__title">
+                    <a href="${escapeHtml(productUrl)}">${escapeHtml(normalizedProduct.name)}</a>
+                </h3>
+
+                <p class="product-card__author">${escapeHtml(normalizedProduct.author)}</p>
+
+                <div class="product-card__meta">
+                    <p class="product-card__price">${formatPrice(normalizedProduct.price)}</p>
+                    <p class="product-card__status${statusClass}">
+                        ${escapeHtml(normalizedProduct.statusText)}
+                    </p>
+                </div>
+
+                <div class="product-card__actions">
+                    <button class="product-card__btn add-to-cart" type="button">
+                        Добавить в корзину
+                    </button>
+                    <button class="product-card__quick-btn open-modal" type="button">
+                        Быстрый просмотр
+                    </button>
+                </div>
+            </div>
+        </article>
+    `;
+    }
+
+    /* Рендер карточек */
+    function renderProductCards() {
+        const catalogContainer = document.getElementById('catalog-products');
+        const featuredContainer = document.getElementById('featured-products');
+
+        if (catalogContainer) {
+            catalogContainer.innerHTML = PRODUCT_CATALOG
+                .map(createProductCardMarkup)
+                .join('');
+        }
+
+        if (featuredContainer) {
+            const limit = Number(featuredContainer.dataset.productsLimit) || 4;
+
+            featuredContainer.innerHTML = PRODUCT_CATALOG
+                .filter((product) => product.available).slice(0, limit)
+                .map(createProductCardMarkup)
+                .join('');
+        }
+    }
+
     /* Добавление товара в корзину с проверкой наличия */
     function tryAddProductToCart(product) {
         if (!product) {
@@ -1399,6 +1481,8 @@
     document.addEventListener('DOMContentLoaded', function () {
         cart.load();
         cart.updateCounter();
+
+        renderProductCards();
 
         initProductLinks();
         initBookPage();

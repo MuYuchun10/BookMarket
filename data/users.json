@@ -18,5 +18,15 @@
         "address": "",
         "postcode": "",
         "email": "admin@admin.com"
+    },
+    "aa@mail.ru": {
+        "id": 1778067836,
+        "name": "Андрей",
+        "password_hash": "$2y$10$Y9TX4PqhcWJAj7sUW5ce9.lWCoGMwfjgMJC\/Qxq8UwOlSLMC22Tqi",
+        "phone": "",
+        "city": "",
+        "address": "",
+        "postcode": "",
+        "email": "aa@mail.ru"
     }
 }

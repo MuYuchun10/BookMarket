@@ -398,10 +398,10 @@
                     aria-label="Уменьшить количество"
                 >−</button>
 
-                <span class="add-to-cart-counter__value">
+                <a class="add-to-cart-counter__value" href="cart.php" aria-label="Перейти в корзину">
                     <span class="add-to-cart-counter__label">В корзине</span>
                     <span class="add-to-cart-counter__count">${quantity}</span>
-                </span>
+                </a>
 
                 <button
                     class="add-to-cart-counter__btn"

@@ -3250,6 +3250,13 @@ body.modal-open {
     justify-content: center;
     line-height: 1.1;
     text-align: center;
+    transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.add-to-cart-counter__value:hover {
+    background-color: var(--color-surface-soft);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
 }
 
 .add-to-cart-counter__label {

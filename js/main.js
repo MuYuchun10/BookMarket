@@ -435,6 +435,7 @@
 
             if (!item) {
                 button.hidden = false;
+                button.classList.remove('add-to-cart--hidden');
                 button.textContent = 'Добавить в корзину';
 
                 if (counter) {
@@ -445,6 +446,7 @@
             }
 
             button.hidden = true;
+            button.classList.add('add-to-cart--hidden');
 
             const counterMarkup = createAddToCartCounterMarkup(product.id, item.quantity);
 

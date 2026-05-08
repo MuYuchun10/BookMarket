@@ -1,0 +1,277 @@
+CREATE DATABASE IF NOT EXISTS bookmarket
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+USE bookmarket;
+
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
+    phone VARCHAR(30) DEFAULT NULL,
+    city VARCHAR(100) DEFAULT NULL,
+    address VARCHAR(255) DEFAULT NULL,
+    postcode VARCHAR(20) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT DEFAULT NULL,
+    parent_id INT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(60) NOT NULL UNIQUE,
+    category_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    author VARCHAR(255) NOT NULL,
+    description TEXT DEFAULT NULL,
+    full_description TEXT DEFAULT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    image VARCHAR(255) DEFAULT NULL,
+    image_back VARCHAR(255) DEFAULT NULL,
+    image_spread VARCHAR(255) DEFAULT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    publisher VARCHAR(150) DEFAULT NULL,
+    published_year YEAR DEFAULT NULL,
+    pages INT DEFAULT NULL,
+    language VARCHAR(50) DEFAULT 'Русский',
+    cover_type VARCHAR(100) DEFAULT NULL,
+    article VARCHAR(50) DEFAULT NULL,
+    is_new BOOLEAN NOT NULL DEFAULT FALSE,
+    is_hit BOOLEAN NOT NULL DEFAULT FALSE,
+    status BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    INDEX idx_books_category_id (category_id),
+    INDEX idx_books_price (price),
+    INDEX idx_books_author (author),
+    INDEX idx_books_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    order_number VARCHAR(30) NOT NULL UNIQUE,
+    customer_name VARCHAR(100) NOT NULL,
+    customer_email VARCHAR(150) DEFAULT NULL,
+    phone VARCHAR(30) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    street VARCHAR(150) NOT NULL,
+    house VARCHAR(30) NOT NULL,
+    flat VARCHAR(30) DEFAULT NULL,
+    comment TEXT DEFAULT NULL,
+    subtotal DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    discount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    total DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    status ENUM('new', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'new',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_orders_user_id (user_id),
+    INDEX idx_orders_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    book_id INT NOT NULL,
+    book_title VARCHAR(255) NOT NULL,
+    book_author VARCHAR(255) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE RESTRICT,
+    INDEX idx_order_items_order_id (order_id),
+    INDEX idx_order_items_book_id (book_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO users (name, email, password_hash, role) VALUES
+('Администратор', 'admin@admin.com', '$2y$12$RsiGv3pmFPh4xiRwJXFSMOCBGcjBBl6LFP9l4.c5Ul97izdscILlK', 'admin');
+
+INSERT INTO categories (name, slug, description) VALUES
+('Художественная литература', 'fiction', 'Романы, классика и художественная проза.'),
+('Фантастика', 'fantasy', 'Книги о магии, необычных мирах и приключениях.'),
+('Детективы', 'detective', 'Классические и современные детективные истории.'),
+('Учебная литература', 'study', 'Книги для учебы, программирования и профессионального развития.'),
+('Бизнес', 'business', 'Книги о бизнесе, управлении и финансах.'),
+('Саморазвитие', 'self-development', 'Книги о привычках, эффективности и личностном росте.');
+
+INSERT INTO books (
+    code,
+    category_id,
+    title,
+    slug,
+    author,
+    description,
+    full_description,
+    price,
+    image,
+    image_back,
+    image_spread,
+    quantity,
+    publisher,
+    published_year,
+    pages,
+    language,
+    cover_type,
+    article,
+    is_new,
+    is_hit,
+    status
+) VALUES
+(
+    'book-1984',
+    (SELECT id FROM categories WHERE slug = 'fiction'),
+    '1984',
+    '1984',
+    'Джордж Оруэлл',
+    'Культовый роман-антиутопия о тотальном контроле, страхе и мире подавленной свободы.',
+    '«1984» Джорджа Оруэлла - мрачная антиутопия о мире тотального надзора, где под контролем оказываются не только поступки человека, но и его мысли.\nЭто история о пропаганде, языке, власти и сопротивлении системе, которая по-прежнему звучит тревожно и современно.',
+    590.00,
+    'images/books/1984-front.jpg',
+    'images/books/1984-back.jpg',
+    'images/books/1984-spread.jpg',
+    0,
+    'Book House',
+    2023,
+    352,
+    'Русский',
+    'Твердая',
+    'BK-1984-14',
+    FALSE,
+    TRUE,
+    TRUE
+),
+(
+    'book-master-margarita',
+    (SELECT id FROM categories WHERE slug = 'fiction'),
+    'Мастер и Маргарита',
+    'master-i-margarita',
+    'М. Булгаков',
+    'Мистический роман о любви, добре, зле и судьбе на фоне Москвы.',
+    'Роман Михаила Булгакова объединяет сатиру, мистику, философию и историю любви, создавая одну из самых необычных книг русской литературы.\nКнига подойдет тем, кто любит многослойные произведения, в которых реальность переплетается с фантастикой.',
+    720.00,
+    'images/books/master-margarita-front.jpg',
+    'images/books/master-margarita-back.jpg',
+    'images/books/master-margarita-spread.jpg',
+    12,
+    'Эксмо',
+    2024,
+    480,
+    'Русский',
+    'Твердая',
+    'BK-MM-09',
+    TRUE,
+    TRUE,
+    TRUE
+),
+(
+    'book-atomic-habits',
+    (SELECT id FROM categories WHERE slug = 'self-development'),
+    'Атомные привычки',
+    'atomnye-privychki',
+    'Джеймс Клир',
+    'Практичная книга о том, как маленькие привычки приводят к большим результатам.',
+    'Джеймс Клир показывает, как ежедневные небольшие изменения накапливаются и со временем дают заметный эффект в учебе, работе и жизни.\nКнига будет полезна тем, кто хочет выстроить устойчивые привычки и избавиться от действий, которые мешают двигаться вперед.',
+    850.00,
+    'images/books/atomic-habits-front.jpg',
+    'images/books/atomic-habits-back.jpg',
+    'images/books/atomic-habits-spread.jpg',
+    8,
+    'МИФ',
+    2024,
+    368,
+    'Русский',
+    'Мягкая',
+    'BK-AH-21',
+    TRUE,
+    TRUE,
+    TRUE
+),
+(
+    'book-harry-potter',
+    (SELECT id FROM categories WHERE slug = 'fantasy'),
+    'Гарри Поттер',
+    'harry-potter',
+    'Дж. К. Роулинг',
+    'История о мире магии, дружбе, приключениях и борьбе со злом.',
+    'Первая книга знаменитой серии открывает читателю школу магии Хогвартс, знакомит с героями и запускает большое приключение, полное тайн и опасностей.\nОна отлично подходит для любителей волшебных миров, атмосферных историй и ярких персонажей.',
+    910.00,
+    'images/books/harry-potter-front.jpg',
+    'images/books/harry-potter-back.jpg',
+    'images/books/harry-potter-spread.jpg',
+    9,
+    'Росмэн',
+    2022,
+    432,
+    'Русский',
+    'Твердая',
+    'BK-HP-01',
+    FALSE,
+    TRUE,
+    TRUE
+),
+(
+    'book-clean-code',
+    (SELECT id FROM categories WHERE slug = 'study'),
+    'Чистый код',
+    'clean-code',
+    'Роберт Мартин',
+    'Книга о принципах написания понятного, поддерживаемого и качественного кода.',
+    'Популярная книга Роберта Мартина о том, как писать код, который легко читать, тестировать и сопровождать.\nПодойдет студентам и разработчикам, которые хотят делать проекты чище и профессиональнее.',
+    1200.00,
+    'images/books/clean-code-front.jpg',
+    'images/books/clean-code-back.jpg',
+    'images/books/clean-code-spread.jpg',
+    6,
+    'Питер',
+    2023,
+    464,
+    'Русский',
+    'Твердая',
+    'BK-CC-17',
+    FALSE,
+    TRUE,
+    TRUE
+),
+(
+    'book-orient-express',
+    (SELECT id FROM categories WHERE slug = 'detective'),
+    'Убийство в Восточном экспрессе',
+    'ubiystvo-v-vostochnom-ekspresse',
+    'Агата Кристи',
+    'Классический детектив о загадочном убийстве в роскошном поезде.',
+    'Один из самых известных романов Агаты Кристи, где знаменитый сыщик Эркюль Пуаро расследует преступление в замкнутом пространстве поезда.\nКнига отлично подойдет тем, кто любит интригу, логику и напряженный сюжет.',
+    640.00,
+    'images/books/orient-express-front.jpg',
+    'images/books/orient-express-back.jpg',
+    'images/books/orient-express-spread.jpg',
+    10,
+    'АСТ',
+    2024,
+    320,
+    'Русский',
+    'Мягкая',
+    'BK-OE-05',
+    TRUE,
+    FALSE,
+    TRUE
+);
